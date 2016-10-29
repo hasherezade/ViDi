@@ -5,7 +5,7 @@
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
 const QString APP_VERSION = "0.2.5.2";
-const QString SITE_LINK = "http://hasherezade.net/ViDi";
+const QString SITE_LINK = "https://hshrzd.wordpress.com/";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), m_offsetDialog(this),
