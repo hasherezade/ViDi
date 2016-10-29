@@ -25,8 +25,8 @@ fi
 mkdir ViDi
 cd ViDi
 git clone https://github.com/hasherezade/ViDi.git
-echo "[+] vidi cloned"
-mv vidi src
+echo "[+] ViDi cloned"
+mv ViDi src
 cd src
 git clone https://github.com/hasherezade/bearparser.git
 echo "[+] bearparser cloned"
