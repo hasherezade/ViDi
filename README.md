@@ -1,5 +1,6 @@
 ViDi - Visual Disassembler
 ==========
+Supports: PE 32/64 bit, DOS MZ
 
 WARNING: this is my old unfinished project, I am puting it here as an experiment!<br/>
 Please report any bugs and remarks to: hasherezade@gmail.com<br/>
