@@ -12,7 +12,7 @@ Requires:
 + capstone (eventually: udis86)
 + cmake http://www.cmake.org/<br/>
 
-To build it on Linux you can use the given script - it automatically downloads this repository and all the dependencies:<br/>
+To build it on Linux or MacOS you can use the given script - it automatically downloads this repository and all the dependencies:<br/>
 https://github.com/hasherezade/ViDi/blob/master/vidi_autobuild.sh<br/>
 
 Read more: https://hshrzd.wordpress.com/vidi-visual-disassembler/
