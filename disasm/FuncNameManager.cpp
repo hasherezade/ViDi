@@ -84,7 +84,7 @@ size_t FuncNameManager::save(const QString &fileName)
     size_t counter = 0;
     for (itr = functionToName.begin(); itr != functionToName.end(); itr++) {
         out << hex << itr.key();
-        out << " ";
+        out << ",";
         out << itr.value();
         out << '\n';
         counter++;
@@ -94,7 +94,7 @@ size_t FuncNameManager::save(const QString &fileName)
     return counter;
 }
 
-size_t  FuncNameManager::load(const QString &fileName)
+size_t FuncNameManager::load(const QString &fileName)
 {
     size_t loaded = 0;
     QFile inputFile(fileName);
@@ -110,12 +110,17 @@ size_t  FuncNameManager::load(const QString &fileName)
     QTextStream in(&inputFile);
     while ( !in.atEnd() ) {
         QString line = in.readLine();
-        QTextStream(&line) >> thunkStr >> funcName;
+        QStringList list = line.split(',');
+        if (list.size() < 2) {
+            continue; //invalid line, skip it
+        }
+        QString thunkStr = list[0];
+        QString funcName = list[1];
         bool isOk = false;
         offset = thunkStr.toLongLong(&isOk, 16);
         
-        if (!isOk) {// || !FuncUtil::validateFuncDesc(funcDesc) ) {
-            continue;
+        if (!isOk) {
+            continue; //invalid line, skip it
         }
         if (setFunctionName(offset, m_aType, funcName)) loaded++;
     }

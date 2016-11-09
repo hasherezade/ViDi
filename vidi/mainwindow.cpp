@@ -4,7 +4,7 @@
 
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
-const QString APP_VERSION = "0.2.5.2";
+const QString APP_VERSION = "0.2.5.3";
 const QString SITE_LINK = "https://hshrzd.wordpress.com/";
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -278,7 +278,6 @@ void MainWindow::onExeSelected(ExeHandler *hndl)
 //follow with appending to the history
 void MainWindow::onTargetClicked(offset_t target)
 {
-    printf("TargetClicked: %llx\n", target);
     ExeHandler *hndl = this->m_controller.selectedExe();
     if (!hndl) return;
 
@@ -301,8 +300,6 @@ void MainWindow::onTargetClicked(offset_t target, Executable::addr_type inType)
 
 bool MainWindow::followOffset(offset_t target)
 {
-    printf("Follow: %llx\n", target);
-
     if (target == INVALID_ADDR) return false;
 
     ExeHandler *hndl = this->m_controller.selectedExe();
@@ -317,7 +314,6 @@ bool MainWindow::followOffset(offset_t target)
         m_disasmYesModel->setCodeBlock(NULL);
         m_disasmNoModel->setCodeBlock(NULL);
         QMessageBox::warning(this,"Error","Cannot resolve this address: " + QString::number(target, 16));
-        printf("Cannot resolve this\n");
         return false;
     }
     //success:

@@ -34,7 +34,7 @@ void Controller::openTags()
         NULL,
         infoStr,
         inputInfo.absoluteDir().path(),
-        "Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
+        "CSV file (*.csv);;Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
     );
     if (fileName.length() == 0) return;
 
@@ -67,7 +67,7 @@ void Controller::saveTags()
         NULL,
         infoStr,
         inputInfo.absoluteDir().path(),
-        "Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
+        "CSV file (*.csv);;Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
     );
     if (fileName.length() == 0) return;
 
@@ -76,7 +76,7 @@ void Controller::saveTags()
         QMessageBox::warning(NULL, "Error!", "Cannot export!");
     } else {
         QString ending =  (counter > 1) ? "s":" ";
-        QMessageBox::information(NULL, "Done!", "Exported: " + QString::number(counter) + " tags" + ending);
+        QMessageBox::information(NULL, "Done!", "Exported: " + QString::number(counter) + " tag" + ending);
     }
 }
 
