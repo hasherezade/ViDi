@@ -61,7 +61,7 @@ bool FuncManager::appendFunction(offset_t offset, Executable::addr_type inType)
 {
     offset_t cOffset = m_Converter->convertAddr(offset, inType, m_aType);
     if (cOffset == INVALID_ADDR) {
-        printf("Cannot append function : failed convertion at : %llx\n", offset);
+        printf("Cannot append function : failed convertion at : %llx\n", static_cast<unsigned long long>(offset));
         return false;
     }
     size_t size = m_functions.size();
@@ -83,7 +83,9 @@ size_t FuncNameManager::save(const QString &fileName)
     QMap<offset_t, QString>::iterator itr;
     size_t counter = 0;
     for (itr = functionToName.begin(); itr != functionToName.end(); itr++) {
-        out << hex << itr.key();
+        //convert every offset into RVA:
+        offset_t rva = m_Converter->convertAddr(itr.key(), Executable::RAW, Executable::RVA);
+        out << hex << rva;
         out << ",";
         out << itr.value();
         out << '\n';
@@ -122,7 +124,8 @@ size_t FuncNameManager::load(const QString &fileName)
         if (!isOk) {
             continue; //invalid line, skip it
         }
-        if (setFunctionName(offset, m_aType, funcName)) loaded++;
+        //functions are stored by RVAs
+        if (setFunctionName(offset, Executable::RVA, funcName)) loaded++;
     }
     inputFile.close();
     return loaded;

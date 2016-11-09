@@ -34,7 +34,7 @@ void Controller::openTags()
         NULL,
         infoStr,
         inputInfo.absoluteDir().path(),
-        "CSV file (*.csv);;Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
+        "CSV file (*.csv);;Config file (*.txt);;All files (*)"
     );
     if (fileName.length() == 0) return;
 
@@ -67,7 +67,7 @@ void Controller::saveTags()
         NULL,
         infoStr,
         inputInfo.absoluteDir().path(),
-        "CSV file (*.csv);;Config file (*.txt);;Config file (*.cfg);;All files (*.*)"
+        "CSV file (*.csv);;Config file (*.txt);;All files (*)"
     );
     if (fileName.length() == 0) return;
 
