@@ -16,5 +16,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.showMaximized();
+    if (argc >= 2) {
+        w.loadFile(QString(argv[1]));
+    }
     return app.exec();
 }

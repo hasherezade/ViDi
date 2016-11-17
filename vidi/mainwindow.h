@@ -44,6 +44,8 @@ public:
     /* events */
     void dragEnterEvent(QDragEnterEvent* ev) { ev->accept(); }
     void dropEvent(QDropEvent* ev);
+    
+    void loadFile(QString fileName);
 
 private slots:
     void info();
@@ -88,9 +90,8 @@ private slots:
         if (offset == INVALID_ADDR) return;
         this->followOffset(offset);
     }
-
+    
 private:
-    void loadFile(QString fileName);
     void addReferenceTracker(QMenu &dMenu);
     void initDisasmUpView();
     void initDisasmView(DisasmView *view, DisasmBaseModel *model);
