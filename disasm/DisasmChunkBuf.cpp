@@ -47,6 +47,15 @@ QString DisasmChunkBuf::getDisasmString(const size_t index)
     return chunk->toString();
 }
 
+
+QString DisasmChunkBuf::getMnemonicString(const size_t index)
+{
+    DisasmChunk* chunk = at(index);
+    if (!chunk) return "";
+
+    return chunk->getMnemString();
+}
+
 bufsize_t DisasmChunkBuf::getChunkSize(const size_t index) const
 {
     DisasmChunk* chunk = at(index);

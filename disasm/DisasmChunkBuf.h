@@ -37,6 +37,7 @@ public:
 
     bufsize_t getChunkSize(const size_t index) const;
     QString getDisasmString(const size_t index);
+    QString getMnemonicString(const size_t index);
 
 protected:
     offset_t m_offset; // buffer start offset

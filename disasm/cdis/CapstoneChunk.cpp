@@ -169,3 +169,11 @@ QString CapstoneChunk::translateBranchingMnemonic() const
     }
     return  desc;
 }
+
+QString CapstoneChunk::getMnemString() const
+{
+    if (this->m_insn.mnemonic == NULL) {
+        return "";
+    }
+    return QString(this->m_insn.mnemonic).toUpper();
+}

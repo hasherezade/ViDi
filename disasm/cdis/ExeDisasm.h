@@ -15,6 +15,11 @@ public:
 
     virtual QString getImportName(offset_t offset, Executable::addr_type aType) const = 0;
     virtual bool isImportedFunction(offset_t offset, Executable::addr_type aType) const = 0;
+    
+    virtual QString getMnemString(size_t index) const 
+    {
+        return CDisasm::getMnemStringAtIndex(index);
+    }
 
     virtual bool isFollowable(const size_t index) const
     {

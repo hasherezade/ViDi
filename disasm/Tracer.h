@@ -96,14 +96,18 @@ public:
         QString str;
         bool isBranching = dis->isBranching(offset, Executable::RAW);
         const offset_t target = dis->getTargetOffset(index, Executable::RAW);
-
+        
         if (isBranching) {
             str = translateBranching(dis, index, &this->m_nameManager);
         } else {
             str = dis->m_disasmBuf.getDisasmString(index);
         }
         if (isImportedFunction(target, Executable::RAW)) {
-            return str + " -> " + getImportName(target, Executable::RAW);
+            if (isBranching) {
+                QString mnem = dis->getMnemStringAtIndex(index);
+                return mnem + " " + getImportName(target, Executable::RAW);
+            }
+            return str + " -> " + this->getImportName(target, Executable::RAW);
         }
         
         if (!isBranching && this->hasName(target, Executable::RAW)) {

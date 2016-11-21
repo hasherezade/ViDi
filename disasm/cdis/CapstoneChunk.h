@@ -21,6 +21,7 @@ public:
 
     virtual bufsize_t getChunkSize() const{ return this->m_insn.size; }
     virtual QString translateBranchingMnemonic() const;
+    virtual QString getMnemString() const;
 
 protected:
     virtual void initStrings()

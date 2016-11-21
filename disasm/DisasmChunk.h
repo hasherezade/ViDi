@@ -40,8 +40,10 @@ public:
         return m_Exe->isValidAddr(addr, aType);
 
     }
+    
     offset_t getImmediate(offset_t lval, Executable::addr_type outType, Executable::addr_type hintType) const;
-
+    
+    virtual QString getMnemString() const = 0;
     virtual bufsize_t getChunkSize() const = 0;
     virtual QString translateBranchingMnemonic() const = 0;
 

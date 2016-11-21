@@ -59,6 +59,23 @@ public:
         return m_disasmBuf.offsetToIndex(offset);
     }
 
+    virtual QString getMnemStringAtIndex(const size_t index) const
+    {
+        DisasmChunk* chunk = this->m_disasmBuf.at(index);
+        if (!chunk) {
+            return "";
+        }
+        return chunk->getMnemString();
+    }
+    
+    virtual QString getMnemStringAtOffset(offset_t offset, Executable::addr_type inType) const
+    {
+        size_t index = offsetToIndex(offset, inType);
+        if (index == INVALID_INDEX) return "";
+
+        return getMnemStringAtIndex(index);
+    }
+    
     //virtual cond_buf Disasm::getCond(offset_t offset, Executable::addr_type inType) const = 0; //TODO
     virtual mnem_type getMnemTypeAtIndex(const size_t index) const
     {
