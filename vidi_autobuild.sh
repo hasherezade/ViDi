@@ -31,6 +31,8 @@ mv ViDi src
 cd src
 git clone https://github.com/hasherezade/bearparser.git
 echo "[+] bearparser cloned"
+cd bearparser
+git checkout qt4
 git clone https://github.com/aquynh/capstone.git
 echo "[+] capstone cloned"
 echo "[+] capstone : switching to branch 'next'"
