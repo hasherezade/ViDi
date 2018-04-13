@@ -38,7 +38,6 @@ git clone https://github.com/aquynh/capstone.git
 echo "[+] capstone cloned"
 echo "[+] capstone : switching to branch 'next'"
 cd capstone
-git checkout next
 cd ..
 cd ..
 mkdir build
