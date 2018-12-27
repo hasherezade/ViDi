@@ -6,9 +6,9 @@ WARNING: this is my old unfinished project, I am puting it here as an experiment
 Please report any bugs and remarks to: hasherezade@gmail.com<br/>
 
 Requires:
-+ Qt4 Core<br/>
-+ Qt4 Gui<br/>
-+ bearparser (Qt4 version: https://github.com/hasherezade/bearparser/tree/qt4)
++ Qt5 Core<br/>
++ Qt5 Widgets<br/>
++ bearparser
 + capstone (eventually: udis86)
 + cmake http://www.cmake.org/<br/>
 
