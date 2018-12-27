@@ -1,12 +1,13 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (vidi)
-find_package (Qt4 REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
 
 if (VIDI_USE_UDIS86)
-    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} ${QT_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR})
+    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC})
 else()
-    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${CAPSTONE_INC} ${QT_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR})
+    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${CAPSTONE_INC})
 endif()
 
 
@@ -112,10 +113,10 @@ set ( rcc
     application.qrc
 )
 
-qt4_add_resources(rcc_src ${rcc})
+qt5_add_resources(rcc_src ${rcc})
 
-QT4_WRAP_UI (forms_hdrs ${forms})
-QT4_WRAP_CPP (hdrs_moc ${hdrs} ${core_hdrs} ${frames_hdrs} ${disasm_mv_hdrs} ${lists_mv_hdrs} )
+QT5_WRAP_UI (forms_hdrs ${forms})
+QT5_WRAP_CPP (hdrs_moc ${hdrs} ${core_hdrs} ${frames_hdrs} ${disasm_mv_hdrs} ${lists_mv_hdrs} )
 
 set ( all_hdrs
     ${core_hdrs}
@@ -145,16 +146,13 @@ SOURCE_GROUP("Source Files\\disasm_mv" FILES ${disasm_mv_srcs} )
 SOURCE_GROUP("Header Files\\lists_mv" FILES ${lists_mv_hdrs} )
 SOURCE_GROUP("Source Files\\lists_mv" FILES ${lists_mv_srcs} )
 
-INCLUDE(${QT_USE_FILE})
-ADD_DEFINITIONS(${QT_DEFINITIONS})
-
 add_executable (vidi vidi.rc resource.h ${all_srcs} ${all_hdrs} ${rcc} ${hdrs_moc})
 
 if (VIDI_USE_UDIS86)
-    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARIES})
+    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets )
     MESSAGE( "Compiling using udis86" )
 else()
-    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${CAPSTONE_LIB} ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARIES})
+    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets)
     MESSAGE( "Compiling using capstone" )
 endif()
 

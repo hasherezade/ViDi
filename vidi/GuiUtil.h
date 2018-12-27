@@ -1,4 +1,4 @@
-#include <QtCore>
+#include <QtWidgets>
 #include <bearparser.h>
 
 namespace vidi

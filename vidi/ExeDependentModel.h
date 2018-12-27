@@ -44,7 +44,8 @@ public:
 
     void reset()
     {
-        QAbstractTableModel::reset();
+        QAbstractTableModel::beginResetModel(); 
+        QAbstractTableModel::endResetModel();
         emit resetView();
     }
 

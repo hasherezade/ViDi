@@ -1,5 +1,5 @@
 #pragma once
-#include <QtGui>
+#include <QtWidgets>
 #include <bearparser.h>
 #include "core/Executables.h"
 #include "GuiUtil.h"

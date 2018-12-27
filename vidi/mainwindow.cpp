@@ -40,10 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_disasmNoModel->setTwinModel(m_disasmYesModel);
     m_disasmYesModel->setTwinModel(m_disasmNoModel);
 
-    m_ui.yesView->horizontalHeader()->setResizeMode(DisasmCmpModel::COL_ICON, QHeaderView::ResizeToContents);
-    m_ui.yesView->horizontalHeader()->setResizeMode(DisasmCmpModel::COL_MATCH, QHeaderView::ResizeToContents);
-    m_ui.noView->horizontalHeader()->setResizeMode(DisasmCmpModel::COL_ICON, QHeaderView::ResizeToContents);
-    m_ui.noView->horizontalHeader()->setResizeMode(DisasmCmpModel::COL_MATCH, QHeaderView::ResizeToContents);
+    m_ui.yesView->horizontalHeader()->setSectionResizeMode(DisasmCmpModel::COL_ICON, QHeaderView::ResizeToContents);
+    m_ui.yesView->horizontalHeader()->setSectionResizeMode(DisasmCmpModel::COL_MATCH, QHeaderView::ResizeToContents);
+    m_ui.noView->horizontalHeader()->setSectionResizeMode(DisasmCmpModel::COL_ICON, QHeaderView::ResizeToContents);
+    m_ui.noView->horizontalHeader()->setSectionResizeMode(DisasmCmpModel::COL_MATCH, QHeaderView::ResizeToContents);
 
     connect(&m_controller.m_exes, SIGNAL(exeListChanged()), this, SLOT(onExeListChanged()));
 
@@ -133,10 +133,10 @@ void MainWindow::initDisasmView(DisasmView *view, DisasmBaseModel *model)
 void MainWindow::initDisasmUpView()
 {
     m_ui.disasmView->enableMenu(true);
-    m_ui.disasmView->horizontalHeader()->setResizeMode(DisasmModel::COL_REFS, QHeaderView::ResizeToContents);
-    m_ui.disasmView->horizontalHeader()->setResizeMode(DisasmModel::COL_ICON, QHeaderView::ResizeToContents);
-    m_ui.disasmView->horizontalHeader()->setResizeMode(DisasmModel::COL_CODE, QHeaderView::Stretch);
-    m_ui.disasmView->horizontalHeader()->setResizeMode(DisasmModel::COL_HEX, QHeaderView::Stretch);
+    m_ui.disasmView->horizontalHeader()->setSectionResizeMode(DisasmModel::COL_REFS, QHeaderView::ResizeToContents);
+    m_ui.disasmView->horizontalHeader()->setSectionResizeMode(DisasmModel::COL_ICON, QHeaderView::ResizeToContents);
+    m_ui.disasmView->horizontalHeader()->setSectionResizeMode(DisasmModel::COL_CODE, QHeaderView::Stretch);
+    m_ui.disasmView->horizontalHeader()->setSectionResizeMode(DisasmModel::COL_HEX, QHeaderView::Stretch);
 
     QMenu &dMenu = m_ui.disasmView->getMenu();
     addReferenceTracker(dMenu);
@@ -199,9 +199,9 @@ void MainWindow::initCodeBlocksFrame(CodeBlocksFrame *frame, CodeBlocksModel *mo
 
 void MainWindow::initColResizeMode(OffsetedView &view)
 {
-    view.horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-    view.horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-    view.horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    view.horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    view.horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    view.horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 }
 
 void MainWindow::dropEvent(QDropEvent* ev)
@@ -429,7 +429,7 @@ void MainWindow::info()
     int ret = 0;
     int count = 0;
     QPixmap p(":/favicon.ico");
-    QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION;
+    QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION + " Qt5";
     QString msg = "<b>" + appName + "</b><br/>";
     msg += "site: <a href=\""+ SITE_LINK +"\">"+SITE_LINK+"</a><br/>";
     msg += "author: hasherezade<br/><br/>";
