@@ -6,8 +6,8 @@ WARNING: this is my old unfinished project, I am puting it here as an experiment
 Please report any bugs and remarks to: hasherezade@gmail.com<br/>
 
 Requires:
-+ Qt4 Core<br/>
-+ Qt4 Gui<br/>
++ Qt5 Core<br/>
++ Qt5 Widgets<br/>
 + bearparser 
 + capstone (eventually: udis86)
 + cmake http://www.cmake.org/<br/>
