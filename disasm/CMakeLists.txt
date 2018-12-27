@@ -3,15 +3,18 @@ project (mini_disasm)
 
 message (STATUS "parser_dir='${PARSER_DIR}'")
 message (STATUS "parser_lib='${PARSER_LIB}'")
+
 message(STATUS "udis_dir='${UDIS86_DIR}'")
 message(STATUS "udis_lib='${UDIS86_LIB}'")
+
+message(STATUS "capstone_includes='${CAPSTONE_INC}'")
 message(STATUS "capstone_dir='${CAPSTONE_DIR}'")
 message(STATUS "capstone_lib='${CAPSTONE_LIB}'")
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
-include_directories (${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} )
+include_directories (${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} ${CAPSTONE_DIR})
 
 set (hdrs
     AddrConverter.h
@@ -101,7 +104,7 @@ endif ()
 
 add_library (mini_disasm STATIC ${hdrs_moc} ${hdrs} ${srcs} ${pe_hdrs} ${pe_srcs} ${dos_hdrs} ${dos_srcs} ${ud_hdrs} ${ud_srcs} ${cd_hdrs} ${cd_srcs})
 if (VIDI_USE_UDIS86)
-    target_link_libraries (mini_disasm ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets )
+    target_link_libraries (mini_disasm ${PARSER_LIB} ${UDIS86_LIB} Qt5::Core Qt5::Widgets )
 else()
     target_link_libraries (mini_disasm ${PARSER_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets)
 endif()
@@ -120,7 +123,8 @@ endif()
 
 # dependencies
 if (VIDI_USE_UDIS86)
-    add_dependencies(mini_disasm bearparser libudis86 capstone-static)
+    add_dependencies(mini_disasm bearparser libudis86 )
 else()
     add_dependencies(mini_disasm bearparser capstone-static)
 endif()
+

@@ -42,8 +42,7 @@ set (COMMANDER_DIR "${CMAKE_SOURCE_DIR}/${M_COMMANDER}" CACHE PATH "Tester main 
 # libs
 if (VIDI_USE_UDIS86)
     add_subdirectory(${M_UDIS86})
-    get_property(libudis86_location TARGET libudis86 PROPERTY LOCATION)
-    set(UDIS86_LIB ${libudis86_location} CACHE FILE "Udis86 library path")
+    set(UDIS86_LIB $<TARGET_FILE:libudis86> CACHE FILE "Udis86 library path")
 endif ()
 
 add_subdirectory (${M_BEARPARSER})
@@ -51,13 +50,11 @@ get_property (parser_location TARGET bearparser PROPERTY LOCATION)
 set (PARSER_LIB ${parser_location} CACHE FILE "BearParser library path")
 
 add_subdirectory (${M_MINIDIS})
-get_property (minidis_location TARGET mini_disasm PROPERTY LOCATION)
-set (MINIDIS_LIB ${minidis_location} CACHE FILE "MiniDisasm library path")
+set (MINIDIS_LIB $<TARGET_FILE:mini_disasm> CACHE FILE "MiniDisasm library path")
 
 add_subdirectory (${CAPSTONE_DIR})
 include_directories(${CAPSTONE_INC})
-get_property (capstone_location TARGET capstone-static PROPERTY LOCATION)
-set (CAPSTONE_LIB ${capstone_location} CACHE FILE  CapstoneLib)
+set (CAPSTONE_LIB $<TARGET_FILE:capstone-static> CACHE FILE  CapstoneLib)
 
 # executables
 add_subdirectory(vidi)
@@ -66,5 +63,5 @@ add_subdirectory(vidi)
 if (VIDI_USE_UDIS86)
     add_dependencies(vidi bearparser libudis86 mini_disasm)
 else()
-    add_dependencies(vidi bearparser mini_disasm)
+    add_dependencies(vidi bearparser capstone-static mini_disasm)
 endif()
