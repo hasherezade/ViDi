@@ -1,0 +1,40 @@
+os:
+  - Visual Studio 2015
+
+platform: x64
+  - x64
+
+branches:
+  only:
+    - master
+   
+install:
+  - git submodule update --init --recursive
+  - set PATH=%PATH%;C:\Program Files\CMake\bin
+
+build:
+  verbosity: detailed
+
+configuration:
+  - Debug
+  
+environment:
+  matrix:
+    - env_arch: "x64"
+      QT5: C:\Qt\5.11\msvc2015_64
+    - env_arch: "x86"
+      QT5: C:\Qt\5.11\msvc2015
+
+before_build:
+  - set PATH=%PATH%;%QT5%\bin;%QT5%\lib\cmake
+  - set Qt5Core_DIR=%QT5%
+  
+build_script:
+  - mkdir build
+  - cd build
+  - if [%env_arch%]==[x64] (
+      cmake .. -A x64 )
+  - if [%env_arch%]==[x86] (
+      cmake .. )
+  - cmake --build .
+  - cd ..
