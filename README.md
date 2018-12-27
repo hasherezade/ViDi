@@ -1,5 +1,8 @@
 ViDi - Visual Disassembler
 ==========
+
+[![Build status](https://ci.appveyor.com/api/projects/status/jdbtd8s1m5hnpgn1?svg=true)](https://ci.appveyor.com/project/hasherezade/vidi)
+
 Supports: PE 32/64 bit, DOS MZ
 
 WARNING: this is my old unfinished project, I am puting it here as an experiment!<br/>
