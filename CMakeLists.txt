@@ -46,8 +46,7 @@ if (VIDI_USE_UDIS86)
 endif ()
 
 add_subdirectory (${M_BEARPARSER})
-get_property (parser_location TARGET bearparser PROPERTY LOCATION)
-set (PARSER_LIB ${parser_location} CACHE FILE "BearParser library path")
+set (PARSER_LIB $<TARGET_FILE:bearparser> CACHE FILE "BearParser library path")
 
 add_subdirectory (${M_MINIDIS})
 set (MINIDIS_LIB $<TARGET_FILE:mini_disasm> CACHE FILE "MiniDisasm library path")
