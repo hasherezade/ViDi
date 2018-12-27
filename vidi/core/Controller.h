@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QtGui>
+#include <QtWidgets>
 #include <bearparser.h>
 
 #include "Executables.h"

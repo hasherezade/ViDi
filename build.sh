@@ -1,11 +1,9 @@
-#!/bin/bash
-echo "Trying to autobuild ViDi..."
+echo "Trying to build ViDi..."
 
 #QT check
+QT_VER=`qmake -v`
 QTV="version "
-if echo `qmake-qt4 -version` | grep -q "$QTV"; then
-    echo "[+] Qt5 found!"
-elif echo `qmake -v` | grep -q "$QTV"; then
+if echo "$QT_VER" | grep -q "$QTV"; then
     echo "[+] Qt5 found!"
 else
     echo "[-] Qt5 NOT found!"
@@ -22,18 +20,16 @@ else
     echo "Install cmake first"
     exit -1
 fi
-
-mkdir ViDi
-cd ViDi
-git clone --recursive https://github.com/hasherezade/ViDi.git
-echo "[+] ViDi cloned"
-mv ViDi src
+echo $CMAKE_VER
+cd ..
 mkdir build
 echo "[+] build directory created"
 cd build
-cmake -G "Unix Makefiles" ../src/
+cmake -G "Unix Makefiles" ../
 make
 cd ..
-cp build/vidi/vidi ./
-echo "[+] Success! ViDi is here:"
+cp build/vidi/vidi ./ViDi
+ls ViDi
+echo "Done!"
 pwd
+

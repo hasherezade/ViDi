@@ -43,7 +43,7 @@ void DisasmView::resetFont()
     const QFont &f = m_disasmViewSettings->font();
     QHeaderView *verticalHeader = this->verticalHeader();
     if (verticalHeader) {
-        verticalHeader->setResizeMode(QHeaderView::Interactive);
+        verticalHeader->setSectionResizeMode(QHeaderView::Interactive);
         verticalHeader->setDefaultSectionSize(static_cast<int>(f.pointSize()*1.8));
     }
     setFont(f);

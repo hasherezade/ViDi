@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtCore>
 #include <vector>
 #include <bearparser.h>
 

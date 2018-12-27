@@ -1,5 +1,5 @@
 #pragma once
-#include <QtGui>
+#include <QtWidgets>
 
 class MouseTrackingTableView : public QTableView
 {

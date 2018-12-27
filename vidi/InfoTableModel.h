@@ -62,6 +62,13 @@ protected slots:
     void onExeListChanged() { reset(); }
 
 protected:
+
+    void reset()
+    {
+        beginResetModel(); 
+        endResetModel();
+    }
+
     Executables* m_Exes;
 
     QVariant getDisplayData(int role, int attribute, ExeHandler *exeHndl) const;

@@ -2,7 +2,7 @@
 
 #include <QApplication>
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include "mainwindow.h"
 

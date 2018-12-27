@@ -1,5 +1,5 @@
 #pragma once
-#include <QtGui>
+#include <QtWidgets>
 
 //autodeleting on finish
 class LoadProgressBar : public QProgressBar

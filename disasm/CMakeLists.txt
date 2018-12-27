@@ -8,9 +8,10 @@ message(STATUS "udis_lib='${UDIS86_LIB}'")
 message(STATUS "capstone_dir='${CAPSTONE_DIR}'")
 message(STATUS "capstone_lib='${CAPSTONE_LIB}'")
 
-find_package (Qt4 REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
 
-include_directories (${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} ${QT_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR})
+include_directories (${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} )
 
 set (hdrs
     AddrConverter.h
@@ -80,7 +81,7 @@ set (dos_srcs
     dos/DosTracer.cpp
 )
 
-QT4_WRAP_CPP (hdrs_moc ${hdrs} ${pe_hdrs} ${dllparse_hdrs})
+QT5_WRAP_CPP (hdrs_moc ${hdrs} ${pe_hdrs} ${dllparse_hdrs})
 
 SOURCE_GROUP("Source Files\\Auto Generated" FILES ${hdrs_moc} ${rcc_src} )
 
@@ -98,14 +99,11 @@ if (VIDI_USE_UDIS86)
     SOURCE_GROUP("Header Files\\udis" FILES ${ud_hdrs} )
 endif ()
 
-INCLUDE(${QT_USE_FILE})
-ADD_DEFINITIONS(${QT_DEFINITIONS})
-
 add_library (mini_disasm STATIC ${hdrs_moc} ${hdrs} ${srcs} ${pe_hdrs} ${pe_srcs} ${dos_hdrs} ${dos_srcs} ${ud_hdrs} ${ud_srcs} ${cd_hdrs} ${cd_srcs})
 if (VIDI_USE_UDIS86)
-    target_link_libraries (mini_disasm ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARIES})
+    target_link_libraries (mini_disasm ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets )
 else()
-    target_link_libraries (mini_disasm ${PARSER_LIB} ${CAPSTONE_LIB} ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARIES})
+    target_link_libraries (mini_disasm ${PARSER_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets)
 endif()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})

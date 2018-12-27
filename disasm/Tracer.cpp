@@ -144,7 +144,7 @@ void Tracer::traceBlocks(ExeDisasm* disasm, offset_t startOffset)
     const size_t initialBlockCount = m_blocks.size();
 
     if (this->blockAt(startOffset, aType) != NULL) {
-        Logger::append(Logger::INFO, "Already initialized %llx\n", static_cast<long long unsigned>(startOffset));
+        //Logger::append(Logger::INFO, "Already initialized %llx\n", static_cast<long long unsigned>(startOffset));
         return;
     }
 
