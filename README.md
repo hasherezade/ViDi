@@ -2,6 +2,7 @@ ViDi - Visual Disassembler
 ==========
 
 [![Build status](https://ci.appveyor.com/api/projects/status/jdbtd8s1m5hnpgn1?svg=true)](https://ci.appveyor.com/project/hasherezade/vidi)
+[![Build status](https://travis-ci.org/hasherezade/ViDi.svg?branch=master)](https://travis-ci.org/hasherezade/ViDi)
 
 Supports: PE 32/64 bit, DOS MZ
 
