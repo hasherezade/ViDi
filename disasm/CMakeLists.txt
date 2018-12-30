@@ -14,7 +14,7 @@ message(STATUS "capstone_lib='${CAPSTONE_LIB}'")
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
-include_directories (${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC} ${CAPSTONE_DIR})
+include_directories (${PARSER_INC} ${UDIS86_DIR} ${CAPSTONE_INC} ${CAPSTONE_DIR})
 
 set (hdrs
     AddrConverter.h

@@ -4,10 +4,12 @@ project (vidi)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
+include_directories ( ${PARSER_INC} )
+
 if (VIDI_USE_UDIS86)
-    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${UDIS86_DIR} ${CAPSTONE_INC})
+    include_directories (${MINIDIS_DIR} ${UDIS86_DIR} ${CAPSTONE_INC})
 else()
-    include_directories (${MINIDIS_DIR} ${PARSER_DIR} ${CAPSTONE_INC})
+    include_directories (${MINIDIS_DIR} ${CAPSTONE_INC})
 endif()
 
 
@@ -158,3 +160,4 @@ endif()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+

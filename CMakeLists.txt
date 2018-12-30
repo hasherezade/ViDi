@@ -33,7 +33,10 @@ option(CAPSTONE_X86_ATT_DISABLE "Disable x86 AT&T syntax" ON)
 option(VIDI_USE_UDIS86 "Build with udis86" OFF)
 
 set( UDIS86_DIR "${CMAKE_SOURCE_DIR}/${M_UDIS86}" CACHE PATH "Udis86 main path")
+
 set (PARSER_DIR "${CMAKE_SOURCE_DIR}/${M_BEARPARSER}" CACHE PATH "BearParser main path")
+set (PARSER_INC "${PARSER_DIR}/include" CACHE PATH "BearParser include path")
+
 set (MINIDIS_DIR "${CMAKE_SOURCE_DIR}/${M_MINIDIS}" CACHE PATH "MiniDis main path")
 set (COMMANDER_DIR "${CMAKE_SOURCE_DIR}/${M_COMMANDER}" CACHE PATH "Tester main path")
 
@@ -64,3 +67,4 @@ if (VIDI_USE_UDIS86)
 else()
     add_dependencies(vidi bearparser capstone-static mini_disasm)
 endif()
+
