@@ -28,7 +28,7 @@ cd build
 cmake -G "Unix Makefiles" ../
 make
 cd ..
-cp build/vidi/vidi ./ViDi
+cp build/vidi/vidi ./build/ViDi
 ls ViDi
 echo "Done!"
 pwd
