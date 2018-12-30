@@ -4,7 +4,7 @@
 
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
-const QString APP_VERSION = "0.2.5.3";
+const QString APP_VERSION = "0.2.5.4";
 const QString SITE_LINK = "https://hshrzd.wordpress.com/";
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
         m_codeBlocksModel(NULL), m_referenceSelectModel(this)
 {
     m_ui.setupUi(this);
-    this->setWindowTitle(APP_NAME + " "+ APP_EXTNAME + " " + APP_VERSION);
+    this->setWindowTitle(APP_NAME + " "+ APP_EXTNAME + " " + APP_VERSION + " Qt5") ;
     setAcceptDrops(true);
 
     makeMenu();
