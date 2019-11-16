@@ -42,7 +42,7 @@ build_script:
 
 after_build:
   - mkdir %artifactName%
-  - cp -r %CONFIGURATION% %artifactName%
+  - cp -r * %artifactName%
   
 artifacts:
   - path: build\%artifactName%
