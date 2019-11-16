@@ -42,8 +42,8 @@ build_script:
   
 after_build:
   - dir
+  - dir %QT5%\bin
   - mkdir %artifactName%
-  - cp %QT5%\bin\Qt5*.dll %artifactName%
   - cp *.exe %artifactName%
   
 artifacts:
