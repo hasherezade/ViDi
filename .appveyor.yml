@@ -38,11 +38,13 @@ before_build:
     cmake .. )
     
 build_script:
-  - cmake --build . --config %CONFIGURATION%
-
+  - cmake --build . --config %CONFIGURATION% --target install
+  
 after_build:
+  - dir
   - mkdir %artifactName%
-  - cp -r * %artifactName%
+  - cp %QT5%\bin\Qt5*.dll %artifactName%
+  - cp *.exe %artifactName%
   
 artifacts:
   - path: build\%artifactName%
