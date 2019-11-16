@@ -68,3 +68,5 @@ else()
     add_dependencies(vidi bearparser capstone-static mini_disasm)
 endif()
 
+#install
+INSTALL( TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_BINARY_DIR} COMPONENT ${PROJECT_NAME} )
