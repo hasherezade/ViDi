@@ -38,13 +38,13 @@ before_build:
     cmake .. )
     
 build_script:
-  - cmake --build . --config %CONFIGURATION% --target install
+  - cmake --build . --config %CONFIGURATION%
   
 after_build:
   - dir
   - dir %QT5%\bin
   - mkdir %artifactName%
-  - cp *.exe %artifactName%
+  - cp -r vidi/%CONFIGURATION% %artifactName%
   
 artifacts:
   - path: build\%artifactName%
