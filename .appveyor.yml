@@ -19,7 +19,7 @@ configuration:
   - Release
   
 environment:
-  artifactName: $(APPVEYOR_PROJECT_NAME)-$(APPVEYOR_REPO_COMMIT)
+  artifactName: $(APPVEYOR_PROJECT_NAME)-$(APPVEYOR_REPO_COMMIT)-$(CONFIGURATION)
   matrix:
     - env_arch: "x64"
       QT5: C:\Qt\5.11\msvc2015_64
@@ -45,9 +45,12 @@ after_build:
   - cp %QT5%\bin\Qt5Core.dll %artifactName%
   - cp %QT5%\bin\Qt5Gui.dll %artifactName%
   - cp %QT5%\bin\Qt5Widgets.dll %artifactName%
-  - cp -r %QT5%\plugins\platforms\qwindows.dll %artifactName%
-  - cp -r %QT5%\plugins\styles\qwindowsvistastyle.dll %artifactName%  
-  - cp -r %QT5%\plugins\imageformats\qico.dll %artifactName%
+  - mkdir %artifactName%\platforms
+  - mkdir %artifactName%\styles
+  - mkdir %artifactName%\imageformats
+  - cp %QT5%\plugins\platforms\qwindows.dll %artifactName%\platforms
+  - cp %QT5%\plugins\styles\qwindowsvistastyle.dll %artifactName%\styles
+  - cp %QT5%\plugins\imageformats\qico.dll %artifactName%\imageformats
   
 artifacts:
   - path: build\%artifactName%
