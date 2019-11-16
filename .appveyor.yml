@@ -41,14 +41,14 @@ build_script:
   - cmake --build . --config %CONFIGURATION%
   
 after_build:
-  - dir
-  - dir %QT5% /s > qtlist.txt
   - mkdir %artifactName%
-  - cp qtlist.txt %artifactName%
   - cp -r vidi/%CONFIGURATION%/* %artifactName%
   - cp %QT5%\bin\Qt5Core.dll %artifactName%
   - cp %QT5%\bin\Qt5Gui.dll %artifactName%
   - cp %QT5%\bin\Qt5Widgets.dll %artifactName%
+  - cp -r %QT5%\plugins\platforms %artifactName%
+  - cp -r %QT5%\plugins\styles %artifactName%  
+  - cp -r %QT5%\plugins\imageformats %artifactName%
   
 artifacts:
   - path: build\%artifactName%
