@@ -17,7 +17,6 @@ build:
 
 configuration:
   - Release
-  - Debug
   
 environment:
   artifactName: $(APPVEYOR_PROJECT_NAME)-$(APPVEYOR_REPO_COMMIT)
@@ -46,9 +45,9 @@ after_build:
   - cp %QT5%\bin\Qt5Core.dll %artifactName%
   - cp %QT5%\bin\Qt5Gui.dll %artifactName%
   - cp %QT5%\bin\Qt5Widgets.dll %artifactName%
-  - cp -r %QT5%\plugins\platforms %artifactName%
-  - cp -r %QT5%\plugins\styles %artifactName%  
-  - cp -r %QT5%\plugins\imageformats %artifactName%
+  - cp -r %QT5%\plugins\platforms\qwindows.dll %artifactName%
+  - cp -r %QT5%\plugins\styles\qwindowsvistastyle.dll %artifactName%  
+  - cp -r %QT5%\plugins\imageformats\qico.dll %artifactName%
   
 artifacts:
   - path: build\%artifactName%
