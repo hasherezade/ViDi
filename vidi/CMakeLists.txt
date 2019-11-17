@@ -148,6 +148,10 @@ SOURCE_GROUP("Source Files\\disasm_mv" FILES ${disasm_mv_srcs} )
 SOURCE_GROUP("Header Files\\lists_mv" FILES ${lists_mv_hdrs} )
 SOURCE_GROUP("Source Files\\lists_mv" FILES ${lists_mv_srcs} )
 
+IF (WIN32)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+ENDIF()
+
 add_executable (vidi vidi.rc resource.h ${all_srcs} ${all_hdrs} ${rcc} ${hdrs_moc})
 
 if (VIDI_USE_UDIS86)
