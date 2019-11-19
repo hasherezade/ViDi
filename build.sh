@@ -1,13 +1,19 @@
 echo "Trying to build ViDi..."
 
 #QT check
+
 QT_VER=`qmake -v`
-QTV="version "
+QTV="version"
 if echo "$QT_VER" | grep -q "$QTV"; then
-    echo "[+] Qt5 found!"
+    QT_FOUND=`whereis qt5`
+    if echo "$QT_FOUND" | grep -q "lib"; then
+        echo "[+] Qt5 found!"
+    else
+        echo "Install Qt5 SDK first"
+        exit -2
+    fi
 else
-    echo "[-] Qt5 NOT found!"
-    echo "Install qt-sdk first"
+    echo "Install Qt5 SDK first"
     exit -1
 fi
 
@@ -21,15 +27,12 @@ else
     exit -1
 fi
 echo $CMAKE_VER
-cd ..
 mkdir build
 echo "[+] build directory created"
 cd build
 cmake -G "Unix Makefiles" ../
 make
 cd ..
-cp build/vidi/vidi ./build/ViDi
-ls ViDi
-echo "Done!"
-pwd
+
+
 
