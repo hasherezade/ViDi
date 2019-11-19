@@ -3,11 +3,12 @@ ViDi - Visual Disassembler
 
 [![Build status](https://ci.appveyor.com/api/projects/status/jdbtd8s1m5hnpgn1?svg=true)](https://ci.appveyor.com/project/hasherezade/vidi)
 [![Build status](https://travis-ci.org/hasherezade/ViDi.svg?branch=master)](https://travis-ci.org/hasherezade/ViDi)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/hasherezade/ViDi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hasherezade/ViDi/alerts/)
 
 Supports: PE 32/64 bit, DOS MZ
 
-WARNING: this is my old unfinished project, I am puting it here as an experiment!<br/>
-Please report any bugs and remarks to: hasherezade@gmail.com<br/>
+**WARNING: this is my old unfinished project, I am puting it here as an experiment! Be aware of possible instability.**<br/>
+**[Issues](https://github.com/hasherezade/ViDi/issues)**
 
 Requires:
 + Qt5 Core<br/>
