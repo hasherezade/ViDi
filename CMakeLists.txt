@@ -68,3 +68,4 @@ else()
     add_dependencies(vidi bearparser capstone-static mini_disasm)
 endif()
 
+

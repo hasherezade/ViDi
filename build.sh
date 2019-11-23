@@ -1,7 +1,7 @@
-echo "Trying to build ViDi..."
+#!/bin/bash
+echo "Trying to autobuild ViDi..."
 
 #QT check
-
 QT_VER=`qmake -v`
 QTV="version"
 if echo "$QT_VER" | grep -q "$QTV"; then
@@ -26,13 +26,11 @@ else
     echo "Install cmake first"
     exit -1
 fi
-echo $CMAKE_VER
+
 mkdir build
-echo "[+] build directory created"
+echo "[+] build director created"
 cd build
-cmake -G "Unix Makefiles" ../
-make
-cd ..
-
-
+mkdir $(pwd)/out
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$(pwd)/out ..
+cmake --build . --target install --config Release
 
