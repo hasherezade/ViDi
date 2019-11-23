@@ -28,7 +28,7 @@ else
 fi
 
 mkdir build
-echo "[+] build director created"
+echo "[+] build directory created"
 cd build
 mkdir $(pwd)/out
 cmake -DCMAKE_INSTALL_PREFIX:PATH=$(pwd)/out ..
