@@ -152,16 +152,20 @@ IF (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 ENDIF()
 
-add_executable (vidi vidi.rc resource.h ${all_srcs} ${all_hdrs} ${rcc} ${hdrs_moc})
+add_executable (${PROJECT_NAME} vidi.rc resource.h ${all_srcs} ${all_hdrs} ${rcc} ${hdrs_moc})
 
 if (VIDI_USE_UDIS86)
-    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets )
+    target_link_libraries (${PROJECT_NAME} ${MINIDIS_LIB} ${PARSER_LIB} ${UDIS86_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets )
     MESSAGE( "Compiling using udis86" )
 else()
-    target_link_libraries (vidi ${MINIDIS_LIB} ${PARSER_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets)
+    target_link_libraries (${PROJECT_NAME} ${MINIDIS_LIB} ${PARSER_LIB} ${CAPSTONE_LIB} Qt5::Core Qt5::Widgets)
     MESSAGE( "Compiling using capstone" )
 endif()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
+
+#install
+INSTALL( TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT ${PROJECT_NAME} )
 
