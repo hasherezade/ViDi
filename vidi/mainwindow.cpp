@@ -4,15 +4,15 @@
 
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
-const QString APP_VERSION = "0.2.5.4";
-const QString SITE_LINK = "https://hshrzd.wordpress.com/";
+const QString APP_VERSION = "0.2.5.5";
+const QString SITE_LINK = "https://vidi.hasherezade.net/";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), m_offsetDialog(this),
         m_codeBlocksModel(NULL), m_referenceSelectModel(this)
 {
     m_ui.setupUi(this);
-    this->setWindowTitle(APP_NAME + " "+ APP_EXTNAME + " " + APP_VERSION + " Qt5") ;
+    this->setWindowTitle(APP_NAME + " "+ APP_EXTNAME + " " + APP_VERSION + " Qt5 *alpha*") ;
     setAcceptDrops(true);
 
     makeMenu();
@@ -429,21 +429,24 @@ void MainWindow::info()
     int ret = 0;
     int count = 0;
     QPixmap p(":/favicon.ico");
-    QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION + " Qt5";
+    QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION + " Qt5 *alpha*";
     QString msg = "<b>" + appName + "</b><br/>";
-    msg += "site: <a href=\""+ SITE_LINK +"\">"+SITE_LINK+"</a><br/>";
-    msg += "author: hasherezade<br/><br/>";
+    msg += "author: <a href=\"https://hasherezade.net\">hasherezade</a><br/><br/>";
+    msg += "PE parsing powered by: <a href=\"https://github.com/hasherezade/bearparser/\">bearparser</a><br/>";
 
 #ifdef BUILD_WITH_UDIS86
-    msg += "disassembly powered by: udis86";
+    msg += "Disassembly powered by: udis86";
 #else
-    msg += "disassembly powered by: <a href=\"http://www.capstone-engine.org/\">capstone engine</a><br/><br/>";
+    msg += "Disassembly powered by: <a href=\"http://www.capstone-engine.org/\">capstone engine</a><br/><br/>";
 #endif
 
     msg += "THIS TOOL IS PROVIDED \"AS IS\" WITHOUT WARRANTIES OF ANY KIND. <br/>\
         Use it at your own risk and responsibility.<br/>\
-        Only for research purpose. Do not use it to break the law!";
-
+        <b>WARNING: this is an experimental version!</b><br/>";
+        
+    msg += "<a href=\""+ SITE_LINK +"\">Project website</a><br/>";
+    msg += "<a href=\"https://github.com/hasherezade/ViDi/issues\">Report and issue...</a><br/>";
+    
     QMessageBox msgBox;
     msgBox.setWindowTitle("Info");
 
