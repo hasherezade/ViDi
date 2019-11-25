@@ -222,12 +222,12 @@ public:
         QSet<offset_t> unsolved = m_unsolvedOffsets;
         while (depth++ < maxDepth) {
             fetchUnsolved(unsolved);
-            qDebug("Depth: %d, unsolved : %d", depth, unsolved.size());
+            std::cout <<"Depth: " << std::dec << depth << " unsolved : " << unsolved.size() << std::endl;
             if (unsolved.size() == 0) {
                 return true;
             }
             if (unsolved.size() > MAX_UNSOLVED) {
-                qDebug("Unsolved limit exceeded: %d", unsolved.size());
+                std::cout << "Unsolved limit exceeded: " << std::dec << unsolved.size() << std::endl;
                 break;
             }
             resolveUnsolvedBranches(unsolved);
