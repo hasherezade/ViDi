@@ -41,15 +41,16 @@ CodeBlock* Tracer::addNewCodeBlock(offset_t offset)
     return  &m_blocks[offset];
 }
 
-QSet<offset_t> Tracer::fetchUnsolved()
+size_t Tracer::fetchUnsolved(QSet<offset_t> &unsolved)
 {
-    QSet<offset_t> unsolved;// = m_unsolvedOffsets;
+    size_t added = 0;
     for (QMap<offset_t, ForkPoint>::iterator itr = m_forks.begin();itr != m_forks.end(); itr++) {
         ForkPoint &p = itr.value();
         offset_t uOff = p.yesOffset;
         if (uOff == INVALID_ADDR) continue;
         if (!getDisasmAt(uOff)) {
             unsolved.insert(uOff);
+            added++;
         }
     }
     QList<offset_t> func = m_funcManager.list();
@@ -59,14 +60,15 @@ QSet<offset_t> Tracer::fetchUnsolved()
         if (uOff == INVALID_ADDR) continue;
         if (!getDisasmAt(uOff)) {
             unsolved.insert(uOff);
+            added++;
         }
     }
-    return unsolved;
+    return added;
 }
 
-void Tracer::resolveUnsolvedBranches(QSet<offset_t> &unsolved)
+void Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
 {
-    QSet<offset_t>::iterator oItr;
+    QSet<offset_t>::const_iterator oItr;
     for (oItr = unsolved.begin();oItr != unsolved.end(); oItr++) {
         offset_t uOff = *oItr;
         if (uOff == INVALID_ADDR) continue;

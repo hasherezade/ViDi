@@ -7,6 +7,8 @@
 #include "ExeDisasm.h"
 #include "CodeBlock.h"
 
+#define MAX_UNSOLVED 200 // maximal number of unsolved addresses that can be autotraced
+
 namespace minidis {
 
 class Tracer : public QObject, public AddrConverter
@@ -218,17 +220,24 @@ public:
 
         size_t depth = 0;
         QSet<offset_t> unsolved = m_unsolvedOffsets;
-        //printf("Unsolved : %d\n", unsolved.size());
         while (depth++ < maxDepth) {
-            //printf("Unsolved : %d\n", unsolved.size());
+            fetchUnsolved(unsolved);
+            qDebug("Depth: %d, unsolved : %d", depth, unsolved.size());
+            if (unsolved.size() == 0) {
+                return true;
+            }
+            if (unsolved.size() > MAX_UNSOLVED) {
+                qDebug("Unsolved limit exceeded: %d", unsolved.size());
+                break;
+            }
             resolveUnsolvedBranches(unsolved);
-            unsolved = fetchUnsolved();
+            unsolved.clear();
             progress += progressChunk;
             emit loadingProgress(progress);
-            if (unsolved.size() == 0) return true;
         }
         return false;
     }
+    
     size_t saveFunctionNames(const QString &fileName) { return m_nameManager.save(fileName); }
     size_t loadFunctionNames(const QString &fileName) { return m_nameManager.load(fileName); }
 
@@ -245,8 +254,8 @@ protected:
     bool appendCodeChunk(ExeDisasm* disasm, CodeBlock* block, const offset_t currOff);
 
     virtual ExeDisasm* makeDisasm(Executable* exe, offset_t startRaw) = 0;
-    QSet<offset_t> fetchUnsolved();
-    virtual void resolveUnsolvedBranches(QSet<offset_t> &unsolved);
+    size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
+    virtual void resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
     bool makeDisasmAt(Executable* exe, offset_t raw, bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL);
     
