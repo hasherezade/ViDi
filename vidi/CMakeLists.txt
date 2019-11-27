@@ -7,9 +7,9 @@ find_package(Qt5Core REQUIRED)
 include_directories ( ${PARSER_INC} )
 
 if (VIDI_USE_UDIS86)
-    include_directories (${MINIDIS_DIR} ${UDIS86_DIR} ${CAPSTONE_INC})
+    include_directories (${MINIDIS_DIR}/include)
 else()
-    include_directories (${MINIDIS_DIR} ${CAPSTONE_INC})
+    include_directories (${MINIDIS_DIR}/include)
 endif()
 
 

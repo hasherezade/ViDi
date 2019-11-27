@@ -1,7 +1,7 @@
 #pragma once
 
 #include <bearparser.h>
-#include "../DisasmBase.h"
+#include "DisasmBase.h"
 
 #include "CapstoneChunk.h"
 

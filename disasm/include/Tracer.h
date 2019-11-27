@@ -4,8 +4,8 @@
 #include <vector>
 #include <bearparser.h>
 
-#include "ExeDisasm.h"
 #include "CodeBlock.h"
+#include "DisasmBase.h"
 
 #define MAX_UNSOLVED 200 // maximal number of unsolved addresses that can be autotraced
 
@@ -43,30 +43,12 @@ public:
         return m_Exe->detectAddrType(off, hintType);
     }
 
-    virtual ExeDisasm* getDisasmAt(offset_t offset, Executable::addr_type inType = Executable::RAW) const
-    {
-        offset = this->convertAddr(offset, inType, Executable::RAW);
-        if (m_offsetToDisasm.contains(offset)) {
-            return m_offsetToDisasm[offset];
-        }
-        if (m_disasmPtrs.contains(offset)) {
-            return m_disasmPtrs[offset];
-        }
-        // closest 
-        QMap<offset_t, ExeDisasm*>::const_iterator disItr = this->m_offsetToDisasm.begin();//upperBound(offset);
-        for (; disItr != this->m_offsetToDisasm.constEnd() ; disItr++) {
-            ExeDisasm* dis = disItr.value();
-            if (dis->hasOffset(offset)) {
-                return dis;
-            }
-        }
-        return NULL;
-    }
+    virtual DisasmBase* getDisasmAt(offset_t offset, Executable::addr_type inType = Executable::RAW) const;
     
     virtual minidis::mnem_type getMnemTypeAtOffset(offset_t offset, Executable::addr_type inType)
     {
         offset = this->convertAddr(offset, inType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return MT_OTHER;
         return dis->getMnemTypeAtOffset(offset, inType);
     }
@@ -74,7 +56,7 @@ public:
     QString getHexString(offset_t offset, Executable::addr_type aType)
     {
         offset = this->convertAddr(offset, aType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return NULL;
 
         size_t index = dis->m_disasmBuf.offsetToIndex(offset);
@@ -85,12 +67,12 @@ public:
         return dis->getChunkAtIndex(index)->toHexString();
     }
 
-    QString translateBranching(ExeDisasm* dis, const size_t index, FuncNameManager *nameManager) const;
+    QString translateBranching(DisasmBase* dis, const size_t index, FuncNameManager *nameManager) const;
 
     virtual QString getDisasmString(offset_t offset, Executable::addr_type aType)
     {
         offset = this->convertAddr(offset, aType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return NULL;
 
         size_t index = dis->m_disasmBuf.offsetToIndex(offset);
@@ -117,10 +99,11 @@ public:
     }
 
     virtual bool isInternalCall(offset_t offset, Executable::addr_type inType);
+    
     virtual offset_t getTargetOffset(offset_t offset, Executable::addr_type inType,  Executable::addr_type outType)
     {
         offset = this->convertAddr(offset, inType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return INVALID_ADDR;
 
         size_t index = dis->m_disasmBuf.offsetToIndex(offset);
@@ -131,7 +114,7 @@ public:
 
     virtual bool isBranching(offset_t offset, Executable::addr_type inType) const {
         offset = this->convertAddr(offset, inType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return false;
 
         return dis->isBranching(offset, Executable::RAW);
@@ -139,7 +122,7 @@ public:
 
     virtual bool isFollowable(offset_t offset, Executable::addr_type inType) const {
         offset = this->convertAddr(offset, inType, Executable::RAW);
-        ExeDisasm* dis = getDisasmAt(offset);
+        DisasmBase* dis = getDisasmAt(offset);
         if (!dis) return false;
 
         return dis->isFollowable(offset, Executable::RAW);
@@ -251,9 +234,9 @@ public:
 
 protected:
 
-    bool appendCodeChunk(ExeDisasm* disasm, CodeBlock* block, const offset_t currOff);
+    bool appendCodeChunk(DisasmBase* disasm, CodeBlock* block, const offset_t currOff);
 
-    virtual ExeDisasm* makeDisasm(Executable* exe, offset_t startRaw) = 0;
+    virtual DisasmBase* makeDisasm(Executable* exe, offset_t startRaw) = 0;
     size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
     virtual void resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
@@ -271,7 +254,7 @@ protected:
 
     void addForkPoint(offset_t currOff, offset_t target, offset_t next);
 
-    void traceBlocks(ExeDisasm* disasm, offset_t startOffset);
+    void traceBlocks(DisasmBase* disasm, offset_t startOffset);
     CodeBlock* addNewCodeBlock(offset_t offset);
     void filterValidBlocks();
     void traceReferencedCodeBlocks();
@@ -281,7 +264,7 @@ protected:
     FuncManager m_impFuncManager;
 
     // basic keepers
-    QMap<offset_t, ExeDisasm*> m_offsetToDisasm;
+    QMap<offset_t, DisasmBase*> m_offsetToDisasm;
     QMap<offset_t, CodeBlock> m_blocks;
     QMap<offset_t, QSet<offset_t> > m_refs;
     QMap<offset_t, ForkPoint> m_forks;
@@ -293,7 +276,7 @@ protected:
     QList<offset_t> m_validBlocksOffsets;
     QSet<offset_t> m_validBlocksOffsetsSet;
 
-    QMap<offset_t, ExeDisasm*> m_disasmPtrs;
+    QMap<offset_t, DisasmBase*> m_disasmPtrs;
     QMap<offset_t, CodeBlock*> m_blockPtrs;
     QMap<offset_t, QSet<CodeBlock*> > m_refBlocks;
 

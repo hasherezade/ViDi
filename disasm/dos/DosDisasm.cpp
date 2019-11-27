@@ -1,4 +1,4 @@
-#include "DosDisasm.h"
+#include "dos/DosDisasm.h"
 
 using namespace minidis;
 

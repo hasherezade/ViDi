@@ -16,17 +16,21 @@ find_package(Qt5Core REQUIRED)
 
 include_directories (${PARSER_INC} ${UDIS86_DIR} ${CAPSTONE_INC} ${CAPSTONE_DIR})
 
+include_directories (
+  include
+)
+
 set (hdrs
-    AddrConverter.h
-    MnemType.h
-    Context.h
-    TargetValue.h
-    DisasmChunk.h
-    DisasmChunkBuf.h
-    CodeBlock.h
-    FuncNameManager.h
-    DisasmBase.h
-    Tracer.h
+    include/AddrConverter.h
+    include/MnemType.h
+    include/Context.h
+    include/TargetValue.h
+    include/DisasmChunk.h
+    include/DisasmChunkBuf.h
+    include/CodeBlock.h
+    include/FuncNameManager.h
+    include/DisasmBase.h
+    include/Tracer.h
     ExeDisasm.h
 )
 if (VIDI_USE_UDIS86)
@@ -64,9 +68,9 @@ set (cd_srcs
 )
 
 set (pe_hdrs
-    pe/PeDataFetcher.h
-    pe/PeDisasm.h
-    pe/PeTracer.h
+    include/pe/PeDataFetcher.h
+    include/pe/PeDisasm.h
+    include/pe/PeTracer.h
 )
 
 set (pe_srcs
@@ -75,8 +79,8 @@ set (pe_srcs
 )
 
 set (dos_hdrs
-    dos/DosDisasm.h
-    dos/DosTracer.h
+    include/dos/DosDisasm.h
+    include/dos/DosTracer.h
 )
 
 set (dos_srcs
