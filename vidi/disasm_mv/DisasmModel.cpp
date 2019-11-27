@@ -93,7 +93,7 @@ QVariant DisasmModel::data(const QModelIndex &index, int role) const
             const offset_t target = getTracer()->getTargetOffset(offset, Executable::RAW, Executable::RAW);
             const offset_t targetRVA = getTracer()->getTargetOffset(offset, Executable::RAW, Executable::RVA);
 
-            offset_t convRVA = this->m_ExeHandler->getExe()->convertAddr(target, Executable::RAW, Executable::RVA);//
+            //offset_t convRVA = this->m_ExeHandler->getExe()->convertAddr(target, Executable::RAW, Executable::RVA);
             if (target == INVALID_ADDR && targetRVA == INVALID_ADDR) {
                 return QVariant();
             }

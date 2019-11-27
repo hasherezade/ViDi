@@ -208,8 +208,7 @@ void MainWindow::dropEvent(QDropEvent* ev)
 {
     QList<QUrl> urls = ev->mimeData()->urls();
     QList<QUrl>::Iterator urlItr;
-    QCursor cur = this->cursor();
-
+    
     for (urlItr = urls.begin() ; urlItr != urls.end(); urlItr++) {
         loadFile(urlItr->toLocalFile());
     }
@@ -426,8 +425,6 @@ void MainWindow::onExeListChanged()
 
 void MainWindow::info()
 {
-    int ret = 0;
-    int count = 0;
     QPixmap p(":/favicon.ico");
     QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION + " Qt5 *alpha*";
     QString msg = "<b>" + appName + "</b><br/>";
