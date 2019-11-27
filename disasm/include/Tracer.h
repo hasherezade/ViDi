@@ -134,16 +134,25 @@ public:
    
     CodeBlock* blockStartingAt(offset_t offset, Executable::addr_type aType = Executable::RAW)
     {
-        const offset_t raw = this->convertAddr(offset, aType, Executable::RAW); 
+        const offset_t raw = this->convertAddr(offset, aType, Executable::RAW);
+        if (raw == INVALID_ADDR) {
+            return NULL;
+        }
         return m_blocks.contains(raw) ? &m_blocks[raw] : NULL;
     }
 
     CodeBlock* blockAt(offset_t offset, Executable::addr_type aType = Executable::RAW)
     {
+        if (offset == INVALID_ADDR) {
+            return NULL;
+        }
         offset_t raw = this->convertAddr(offset, aType, Executable::RAW);
+        
         //give priority to block starting at given offset
         CodeBlock *block = blockStartingAt(offset, aType);
-        if (block) return block;
+        if (block) {
+            return block;
+        }
         return m_blockPtrs.contains(raw) ? m_blockPtrs[raw] : NULL;
     }
 
@@ -254,7 +263,7 @@ protected:
     void addForkPoint(offset_t currOff, offset_t target, offset_t next);
 
     void traceBlocks(DisasmBase* disasm, offset_t startOffset);
-    CodeBlock* addNewCodeBlock(offset_t offset);
+    CodeBlock* getOrMakeCodeBlockAt(offset_t offset);
     void filterValidBlocks();
     void traceReferencedCodeBlocks();
 

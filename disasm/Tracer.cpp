@@ -26,7 +26,7 @@ QString Tracer::getStringAt(offset_t target)
     return str;
 }
 
-CodeBlock* Tracer::addNewCodeBlock(offset_t offset)
+CodeBlock* Tracer::getOrMakeCodeBlockAt(offset_t offset)
 {
     if (offset == INVALID_ADDR) return NULL;
     
@@ -142,12 +142,12 @@ void Tracer::addForkPoint(offset_t currOff, offset_t target, offset_t next)
 void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
 {
     if (!disasm) return;
-    //printf("Got disasm at startOffset = %lx ,ptr =%x", startOffset, disasm);
+
     Executable::addr_type aType = Executable::RAW;
 
     const size_t startIndex = disasm->m_disasmBuf.offsetToIndex(startOffset);
     const size_t disasmSize = disasm->m_disasmBuf.size();
-    CodeBlock* block = NULL;
+    
 
     const size_t initialBlockCount = m_blocks.size();
 
@@ -156,11 +156,21 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
         return;
     }
 
-    block = addNewCodeBlock(startOffset);
+    offset_t newOffset = startOffset;
+    CodeBlock* block = NULL;
 
-    for (size_t index = startIndex; index < disasmSize; index++){
-        if (block == NULL) break;
-
+    for (size_t index = startIndex; index < disasmSize; index++)
+    {
+        if (!block) {
+            if (this->blockStartingAt(newOffset, Executable::RAW)) {
+                //std::cout << "A block starting at this offset already exist!\n";
+                break;
+            }
+            block = getOrMakeCodeBlockAt(newOffset);
+            if (!block) break;
+            //std::cout << "New block: " << std::hex << newOffset << std::endl;
+        }
+        
         DisasmChunk *chunk = disasm->getChunkAtIndex(index);
         if (!chunk) break;
 
@@ -191,38 +201,38 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
             }
         }
 
-        if (disasm->isBlockEnd(mType)) {
-            //offset_t target = disasm->getTargetOffset(index, aType);
-            if (disasm->isBranching(index) && target == INVALID_ADDR) {
-                block->markInvalid();
-            }
-
-            if (disasm->isBranching(index) && !block->isInvalid()) {
-                bool import = this->isImportedFunction(target, Executable::RAW);
-
-                if (disasm->isConditionalBranching(mType)) {
-                    const offset_t next = disasm->getNextOffset(index);
-                    addForkPoint(currOff, target, next);
-
-                } else if (! isImportedFunction(target, Executable::RAW)) {
-                    //add jump fork point only if it is not a jump to import
-                    addForkPoint(currOff, target, INVALID_ADDR);
-                }
-            }
-
-            offset_t newOffset = disasm->getNextOffset(index);
-            if (newOffset == INVALID_ADDR || this->blockAt(newOffset)) {
-                //printf("Cannot add block at %lx, breaking...\n", newOffset);
-                break;
-            }
-            if (block->size == 0) {
-                if (mType == MT_INT3) block->markInvalid();
-            }
-            block = addNewCodeBlock(newOffset);
+        if (!disasm->isBlockEnd(mType)) {
+            //the block is not finished yet, process further chunks
+            continue;
         }
+        //block finished:
+        if (disasm->isBranching(index) && target == INVALID_ADDR) {
+            block->markInvalid();
+        }
+
+        if (disasm->isBranching(index) && !block->isInvalid()) {
+            bool import = this->isImportedFunction(target, Executable::RAW);
+
+            if (disasm->isConditionalBranching(mType)) {
+                const offset_t next = disasm->getNextOffset(index);
+                addForkPoint(currOff, target, next);
+
+            } else if (!isImportedFunction(target, Executable::RAW)) {
+                //add jump fork point only if it is not a jump to import
+                addForkPoint(currOff, target, INVALID_ADDR);
+            }
+        }
+        if (block->size == 0) {
+            if (mType == MT_INT3) block->markInvalid();
+        }
+        
+        newOffset = disasm->getNextOffset(index);
+        //reset block:
+        block = NULL;
     }
+    
     if (initialBlockCount == m_blocks.size()){
-        printf("No blocks added!\n");
+        std::cout << "No blocks added!\n";
         return;
     }
     filterValidBlocks();
