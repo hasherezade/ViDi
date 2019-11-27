@@ -8,13 +8,12 @@ message(STATUS "udis_dir='${UDIS86_DIR}'")
 message(STATUS "udis_lib='${UDIS86_LIB}'")
 
 message(STATUS "capstone_includes='${CAPSTONE_INC}'")
-message(STATUS "capstone_dir='${CAPSTONE_DIR}'")
 message(STATUS "capstone_lib='${CAPSTONE_LIB}'")
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
-include_directories (${PARSER_INC} ${UDIS86_DIR} ${CAPSTONE_INC} ${CAPSTONE_DIR})
+include_directories (${PARSER_INC} ${UDIS86_DIR} ${CAPSTONE_INC})
 
 include_directories (
   include

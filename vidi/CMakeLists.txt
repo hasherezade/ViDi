@@ -5,12 +5,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
 include_directories ( ${PARSER_INC} )
-
-if (VIDI_USE_UDIS86)
-    include_directories (${MINIDIS_DIR}/include)
-else()
-    include_directories (${MINIDIS_DIR}/include)
-endif()
+include_directories ( ${MINIDIS_DIR}/include )
 
 
 set ( core_hdrs
@@ -168,4 +163,5 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 #install
 INSTALL( TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT ${PROJECT_NAME} )
+
 
