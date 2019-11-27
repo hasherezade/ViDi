@@ -45,7 +45,7 @@ bool ExeHandlerLoader::parse(QString &fileName)
             tracer->resolveUnsolved(3);
         }
 
-    } catch (CustomException e) { }
+    } catch (CustomException &e) { }
 
     emit loaded(exeHndl);
     return isLoaded;

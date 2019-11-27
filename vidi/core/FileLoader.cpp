@@ -27,7 +27,7 @@ bool FileLoader::parse(QString &fileName)
         const bufsize_t MINBUF = 0x200;
         m_Buffer = new FileBuffer(fileName, MINBUF);
         isLoaded = true;
-    } catch (CustomException e) { }
+    } catch (CustomException &e) { }
 
     return isLoaded;
 }
