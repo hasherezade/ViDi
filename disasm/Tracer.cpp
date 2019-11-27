@@ -29,7 +29,8 @@ QString Tracer::getStringAt(offset_t target)
 CodeBlock* Tracer::addNewCodeBlock(offset_t offset)
 {
     if (offset == INVALID_ADDR) return NULL;
-    if (this->getDisasmAt(offset) == NULL) {
+    
+    if (!this->getDisasmAt(offset)) {
         m_unsolvedOffsets.insert(offset);
         //printf("UNSOLVED at = %x\n", offset);
         return NULL;
@@ -68,8 +69,9 @@ size_t Tracer::fetchUnsolved(QSet<offset_t> &unsolved)
     return added;
 }
 
-void Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
+size_t Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
 {
+    size_t added = 0;
     QSet<offset_t>::const_iterator oItr;
     for (oItr = unsolved.begin();oItr != unsolved.end(); oItr++) {
         offset_t uOff = *oItr;
@@ -77,9 +79,11 @@ void Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
         if (!getDisasmAt(uOff)) {
             if (this->makeDisasmAt(m_Exe, uOff, true)) {
                 traceArea(uOff);
+                added++;
             }
         }
     }
+    return added;
 }
 
 void Tracer::addReferencedTargets(offset_t currOff, offset_t target, DisasmChunk *chunk)

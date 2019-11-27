@@ -7,8 +7,6 @@
 #include "CodeBlock.h"
 #include "DisasmBase.h"
 
-#define MAX_UNSOLVED 200 // maximal number of unsolved addresses that can be autotraced
-
 namespace minidis {
 
 class Tracer : public QObject, public AddrConverter
@@ -186,6 +184,7 @@ public:
 
         return m_referedStrings[offset];
     }
+    
     virtual void traceEntrySection() = 0;
     virtual bool traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd = true) = 0;
     virtual bool defineFunction(offset_t offset, Executable::addr_type aType, QString name);
@@ -195,7 +194,7 @@ public:
     QList<offset_t>& getReferedStringsList() { return m_referedStringsList; }
     QList<offset_t>& getNamedOffsetsList() { return m_nameManager.getNamedOffsetsList(); }
 
-    bool resolveUnsolved(const size_t maxDepth = 1)
+    bool resolveUnsolved(const size_t maxDepth, const size_t maxUnsolved)
     {
         emit loadingProgress(0);
         int progress = 0;
@@ -209,7 +208,7 @@ public:
             if (unsolved.size() == 0) {
                 return true;
             }
-            if (unsolved.size() > MAX_UNSOLVED) {
+            if (unsolved.size() > maxUnsolved) {
                 std::cout << "Unsolved limit exceeded: " << std::dec << unsolved.size() << std::endl;
                 break;
             }
@@ -238,7 +237,7 @@ protected:
 
     virtual DisasmBase* makeDisasm(Executable* exe, offset_t startRaw) = 0;
     size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
-    virtual void resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
+    virtual size_t resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
     bool makeDisasmAt(Executable* exe, offset_t raw, bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL);
     
@@ -282,7 +281,6 @@ protected:
 
     Executable::exe_bits m_bitMode;
     Executable *m_Exe;
-    //offset_t m_start;
 
 }; /* class Tracer */
 

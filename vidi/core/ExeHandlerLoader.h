@@ -35,6 +35,8 @@ public:
     virtual bool parse(QString &fileName);
 
 protected:
+    virtual bool trace(ExeHandler& exeHndl);
+    
     void updateProgress(int increment)
     {
         m_loadingProgress += increment;

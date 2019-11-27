@@ -1,5 +1,28 @@
 #include "ExeHandlerLoader.h"
 
+#define MAX_TRACE_DEPTH 3
+#define MAX_TRACE_UNSOLVED 200
+
+bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
+{
+    exeHndl.makeTracer();
+    Tracer * tracer = exeHndl.getTracer();
+    Executable* exe = exeHndl.getExe();
+
+    if (!exe || !tracer) {
+        return false;
+    }
+    connect(tracer, SIGNAL(loadingProgress(int)), this, SLOT(onTracerLoadingProgress(int)));
+    tracer->traceEntrySection();
+
+    const offset_t epRaw = exe->getEntryPoint(Executable::RAW);
+    tracer->defineFunction(epRaw, Executable::RAW, "START");
+    tracer->resolveOffset(epRaw, Executable::RAW);
+
+    tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
+    return true;   
+}
+
 bool ExeHandlerLoader::parse(QString &fileName)
 {
     m_fileName = fileName;
@@ -30,19 +53,7 @@ bool ExeHandlerLoader::parse(QString &fileName)
         if (exeHndl) {
             exeHndl->setFileName(fileName);
             isLoaded = true;
-        }
-        exeHndl->makeTracer();
-        Tracer * tracer = exeHndl->getTracer();
-
-        if (exe && tracer) {
-            connect(tracer, SIGNAL(loadingProgress(int)), this, SLOT(onTracerLoadingProgress(int)));
-            tracer->traceEntrySection();
-
-            const offset_t epRaw = exe->getEntryPoint(Executable::RAW);
-            tracer->defineFunction(epRaw, Executable::RAW, "START");
-            tracer->resolveOffset(epRaw, Executable::RAW);
-
-            tracer->resolveUnsolved(3);
+            trace(*exeHndl);
         }
 
     } catch (CustomException &e) { }
