@@ -55,7 +55,6 @@ add_subdirectory (${M_MINIDIS})
 set (MINIDIS_LIB $<TARGET_FILE:mini_disasm> CACHE FILE "MiniDisasm library path")
 
 add_subdirectory (${CAPSTONE_DIR})
-include_directories(${CAPSTONE_INC})
 set (CAPSTONE_LIB $<TARGET_FILE:capstone-static> CACHE FILE  CapstoneLib)
 
 # executables

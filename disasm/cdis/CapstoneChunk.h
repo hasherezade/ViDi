@@ -3,7 +3,7 @@
 #include <bearparser.h>
 #include <capstone/capstone.h>
 
-#include "../DisasmChunk.h"
+#include "DisasmChunk.h"
 
 namespace minidis {
 

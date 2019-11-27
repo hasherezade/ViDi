@@ -2,6 +2,8 @@
 
 using namespace minidis;
 
+#include "ExeDisasm.h"
+
 bool Tracer::resolveOffset(offset_t offset, Executable::addr_type aType)
 {
     offset_t raw = this->convertAddr(offset, aType, Executable::RAW);
@@ -113,7 +115,7 @@ void Tracer::addReferencedTargets(offset_t currOff, offset_t target, DisasmChunk
     }
 }
 
-bool Tracer::appendCodeChunk(ExeDisasm* disasm, CodeBlock* block, const offset_t currOff)
+bool Tracer::appendCodeChunk(DisasmBase* disasm, CodeBlock* block, const offset_t currOff)
 {
     if (!disasm || !block || currOff == INVALID_ADDR) return false;
     m_disasmPtrs[currOff] = disasm;
@@ -133,7 +135,7 @@ void Tracer::addForkPoint(offset_t currOff, offset_t target, offset_t next)
     addReference(next, currOff);
 }
 
-void Tracer::traceBlocks(ExeDisasm* disasm, offset_t startOffset)
+void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
 {
     if (!disasm) return;
     //printf("Got disasm at startOffset = %lx ,ptr =%x", startOffset, disasm);
@@ -228,7 +230,7 @@ void Tracer::traceArea(offset_t startOffset)
    if (!m_offsetToDisasm.contains(startOffset)) {
         return;
    }
-    ExeDisasm* disasm = this->getDisasmAt(startOffset);
+    DisasmBase* disasm = this->getDisasmAt(startOffset);
     if (!disasm) return;
     //printf("Got disasm at startOffset = %lx ,ptr =%x\n", startOffset, disasm);
     traceBlocks(disasm, startOffset);
@@ -271,10 +273,30 @@ void Tracer::traceReferencedCodeBlocks()
     }
 }
 
+DisasmBase* Tracer::getDisasmAt(offset_t offset, Executable::addr_type inType) const
+{
+    offset = this->convertAddr(offset, inType, Executable::RAW);
+    if (m_offsetToDisasm.contains(offset)) {
+        return m_offsetToDisasm[offset];
+    }
+    if (m_disasmPtrs.contains(offset)) {
+        return m_disasmPtrs[offset];
+    }
+    // closest 
+    QMap<offset_t, DisasmBase*>::const_iterator disItr = this->m_offsetToDisasm.begin();//upperBound(offset);
+    for (; disItr != this->m_offsetToDisasm.constEnd() ; disItr++) {
+        DisasmBase* dis = disItr.value();
+        if (dis->hasOffset(offset)) {
+            return dis;
+        }
+    }
+    return NULL;
+}
+
 bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, bool stopAtBlockEnd, size_t maxElements)
 {
     //printf("Disasm making at %x\n", offset);
-    ExeDisasm *disasm = getDisasmAt(offset);
+    DisasmBase *disasm = getDisasmAt(offset);
     if (!disasm) {
        disasm = makeDisasm(exe, offset);
        if (!disasm) return false;
@@ -289,7 +311,7 @@ bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, bool stopAtBlockEnd,
 bool Tracer::isInternalCall(offset_t offset, Executable::addr_type inType)
 {
     offset = this->convertAddr(offset, inType, Executable::RAW);
-    ExeDisasm* dis = getDisasmAt(offset);
+    DisasmBase* dis = getDisasmAt(offset);
     if (!dis) return NULL;
 
     size_t index = dis->m_disasmBuf.offsetToIndex(offset);
@@ -317,7 +339,7 @@ bool Tracer::defineFunction(offset_t offset, Executable::addr_type aType, QStrin
     return true;
 }
 
-QString Tracer::translateBranching(ExeDisasm* dis, const size_t index, FuncNameManager *nameManager) const
+QString Tracer::translateBranching(DisasmBase* dis, const size_t index, FuncNameManager *nameManager) const
 {
     if (!dis) return "";
     DisasmChunk *uChunk =  dis->m_disasmBuf.at(index);

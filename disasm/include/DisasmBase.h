@@ -45,7 +45,9 @@ public:
     {
         return m_disasmBuf.at(index);
     }
-
+    
+    virtual bool isBranching(offset_t offset, Executable::addr_type aType) = 0;
+    
      //DisasmChunkBuf m_disasmBuf;
     virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL) = 0;
     virtual void clearTable()
@@ -136,7 +138,7 @@ public:
     bool isBlockEnd(const size_t index) const { return isBlockEnd(getMnemTypeAtIndex(index)); }
     bool isJump(const size_t index) const { return isJump(getMnemTypeAtIndex(index)); }
 
-    bool isBranching(size_t index);
+    virtual bool isBranching(size_t index) = 0;
     bool isConditionalBranching(size_t index) const { return isConditionalBranching(getMnemTypeAtIndex(index)); }
     bool isUnonditionalBranching(size_t index) const { return isUnonditionalBranching(getMnemTypeAtIndex(index)); }
 
