@@ -10,7 +10,7 @@ namespace minidis {
 class CapstoneChunk : public DisasmChunk 
 {
 public:
-    CapstoneChunk(cs_insn insn, offset_t startOffset, Executable *parent) 
+    CapstoneChunk(const cs_insn &insn, offset_t startOffset, Executable *parent) 
         : DisasmChunk(startOffset, parent),
         m_insn(insn)
     {

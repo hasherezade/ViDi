@@ -85,7 +85,6 @@ void Controller::removeExe(ExeHandler* exe)
     selectExe(NULL);
     this->m_exes.removeExe(exe);
     delete exe;
-    exe = NULL;
 }
 
 bool Controller::parse(QString &fileName, LoadProgressBar *progressWatcher)

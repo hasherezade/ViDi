@@ -48,8 +48,8 @@ public:
     
     virtual bool isBranching(offset_t offset, Executable::addr_type aType) = 0;
     
-     //DisasmChunkBuf m_disasmBuf;
     virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL) = 0;
+
     virtual void clearTable()
     {
         m_disasmBuf.clear();

@@ -37,7 +37,7 @@ public:
         return rowToOffset(index.row());
     }
 
-    void setColors(DisasmColorSet colorSet) { m_colorSet = colorSet; reset(); }
+    void setColors(const DisasmColorSet &colorSet) { m_colorSet = colorSet; reset(); }
 
     // for DisasmView
     offset_t getOffsetToFollow(const QModelIndex &index, Executable::addr_type outType = Executable::RAW)

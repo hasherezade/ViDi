@@ -40,13 +40,12 @@ QStringList Executables::listFiles()
 {
     QStringList fileNames;
     QList<ExeHandler*>::iterator itr;
-    QString fileName = "";
 
     QMutexLocker lock(&m_listMutex); //LOCKER
     for (itr = m_Exes.begin(); itr != m_Exes.end(); itr++) {
         ExeHandler *exeHndl = (*itr);
-        if (exeHndl->getExe() != NULL) {
-            fileName = exeHndl->getFileName();
+        if (exeHndl->getExe()) {
+            const QString fileName = exeHndl->getFileName();
             fileNames << fileName;
         }
     }

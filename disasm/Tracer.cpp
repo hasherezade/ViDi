@@ -153,7 +153,6 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
     }
 
     block = addNewCodeBlock(startOffset);
-    offset_t startBlockOffset = startOffset;
 
     for (size_t index = startIndex; index < disasmSize; index++){
         if (block == NULL) break;
@@ -239,7 +238,7 @@ void Tracer::traceArea(offset_t startOffset)
 
 void Tracer::filterValidBlocks()
 {
-    Executable::addr_type blockAddrType = Executable::RAW;
+    //block addr type: RAW
     QMap<offset_t, CodeBlock>::iterator itr;
     for (itr = this->m_blocks.begin(); itr != m_blocks.end(); itr++ ) {
 
