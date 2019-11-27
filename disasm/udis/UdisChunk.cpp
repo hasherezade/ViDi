@@ -11,7 +11,6 @@ bool UdisChunk::fetchTargetAddr(const size_t argNum, TargetValue &targetVal) con
     targetVal.m_targetOpNum = argNum;
 
     const ud_t &inpObj = this->ud_obj;
-    offset_t disChunk =  ud_insn_len(&inpObj);
 
     bool got = false;
     offset_t lval =  getSignedLVal(inpObj, argNum, got);
