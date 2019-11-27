@@ -112,10 +112,17 @@ public:
 
     virtual offset_t getNextOffset(const size_t index, const Executable::addr_type aType = Executable::RAW) const
     {
+        if (!m_Exe) return INVALID_ADDR;
+        
         DisasmChunk *chunk = this->getChunkAtIndex(index);
         if (!chunk) return INVALID_ADDR;
 
-        const offset_t raw = getOffset(index, Executable::RAW) + chunk->getChunkSize();
+        offset_t raw = getOffset(index, Executable::RAW);
+        if (raw == INVALID_ADDR) return INVALID_ADDR;
+        
+        raw += chunk->getChunkSize();
+        if (raw >= m_Exe->getContentSize()) return INVALID_ADDR;
+        
         return this->convertAddr(raw, Executable::RAW, aType);
     }
 
