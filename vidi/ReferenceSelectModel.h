@@ -33,14 +33,15 @@ public:
     ReferenceSelectModel(QObject *v_parent)
         : QObject(v_parent), m_ExeHandler(NULL), m_Tracer(NULL),
         m_refOffset(INVALID_ADDR), m_refsType(Executable::NOT_ADDR)
-    {}
+    {
+    }
     
     const QString &getNameOfRefered() const
     {
         return m_nameOfRefered;
     }
 
-    const offset_t getRefOffset() const
+    offset_t getRefOffset() const
     {
         return this->m_refOffset;
     }
