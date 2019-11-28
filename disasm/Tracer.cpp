@@ -22,7 +22,7 @@ QString Tracer::getStringAt(offset_t target)
     if (str.size() == 1) {
         str = this->m_Exe->getWAsciiStringValue(target, 100);
     }
-    if (str.length() == 0) return "";
+    if (str.trimmed().length() == 0) return "";
     return str;
 }
 
