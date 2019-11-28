@@ -10,5 +10,5 @@ BYTE* find_pattern(BYTE *buffer, size_t buf_size, BYTE* pattern_buf, size_t patt
             return (buffer + i);
         }
     }
-    return nullptr;
+    return NULL;
 }
