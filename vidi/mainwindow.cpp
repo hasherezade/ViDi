@@ -4,7 +4,7 @@
 
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
-const QString APP_VERSION = "0.2.5.5-b";
+const QString APP_VERSION = "0.2.5.6";
 const QString SITE_LINK = "https://vidi.hasherezade.net/";
 
 MainWindow::MainWindow(QWidget *parent) :
