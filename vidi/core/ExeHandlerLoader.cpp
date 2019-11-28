@@ -15,6 +15,17 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
     }
     connect(tracer, SIGNAL(loadingProgress(int)), this, SLOT(onTracerLoadingProgress(int)));
     
+    QSet<offset_t> prologs;
+    tracer->findAllPrologs(prologs);
+    
+    QSet<offset_t>::const_iterator pItr;
+    for (pItr = prologs.constBegin(); pItr != prologs.constEnd(); pItr++) {
+        offset_t prologOffset = *pItr;
+        QString name = "func_" + QString::number(prologOffset,16);
+        tracer->defineFunction(prologOffset, Executable::RAW, name);
+        tracer->resolveOffset(prologOffset, Executable::RAW);
+    }
+    
     QMap<offset_t,QString> entrypoints;
     size_t epCount = exe->getAllEntryPoints(entrypoints, Executable::RAW);
 
@@ -27,9 +38,6 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         tracer->resolveOffset(epRaw, Executable::RAW);
     }
     tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
-    
-    tracer->traceEntrySection();
-    tracer->resolveUnsolved(MAX_TRACE_DEPTH, 200);
     return true;   
 }
 

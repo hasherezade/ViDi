@@ -40,7 +40,13 @@ public:
     }
 
     bool contains(offset_t offset) { return offsets.contains(offset); }
-    offset_t getEndOffset() { if (offsets.size() == 0) return 0; return offsets.back(); }
+    
+    offset_t getEndOffset()
+    {
+        if (offsets.size() == 0) return INVALID_INDEX;
+        return offsets.back();
+    }
+    
     void  markInvalid() { m_isInvalid = true; }
     bool isInvalid() { return m_isInvalid; }
 

@@ -143,18 +143,12 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
 {
     if (!disasm) return;
 
-    Executable::addr_type aType = Executable::RAW;
+    const Executable::addr_type aType = Executable::RAW;
 
     const size_t startIndex = disasm->m_disasmBuf.offsetToIndex(startOffset);
     const size_t disasmSize = disasm->m_disasmBuf.size();
-    
 
     const size_t initialBlockCount = m_blocks.size();
-
-    if (this->blockAt(startOffset, aType) != NULL) {
-        //Logger::append(Logger::INFO, "Already initialized %llx\n", static_cast<long long unsigned>(startOffset));
-        return;
-    }
 
     offset_t newOffset = startOffset;
     CodeBlock* block = NULL;
@@ -162,8 +156,9 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
     for (size_t index = startIndex; index < disasmSize; index++)
     {
         if (!block) {
-            if (this->blockStartingAt(newOffset, Executable::RAW)) {
-                //std::cout << "A block starting at this offset already exist!\n";
+            CodeBlock *existingBlock = this->blockStartingAt(newOffset, Executable::RAW);
+            if (existingBlock) {
+                //std::cout <<std::hex << "[WARNING][" << newOffset << "] A block starting at this offset already exist!\n";
                 break;
             }
             block = getOrMakeCodeBlockAt(newOffset);

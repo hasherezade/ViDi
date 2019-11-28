@@ -27,7 +27,9 @@ public:
         return PeDataFetcher::getImportName(m_PE, offset, aType);
     }
 
-protected:
+    protected:
+    
+    size_t findAllPrologs(QSet<offset_t> &prologOffsets);
     virtual PeDisasm* makeDisasm(Executable* exe, offset_t startRaw);
 
     PEFile *m_PE;
