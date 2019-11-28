@@ -63,6 +63,9 @@ size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
     BYTE *nextPtr = secPtr;
     size_t nextSize = secSize;
     
+    BYTE hotpatch_buf[] = { 0x8b, 0xff }; //mov edi, edi
+    Pattern hotpatch(hotpatch_buf, sizeof(hotpatch_buf));
+    
     for (nextPtr = secPtr; nextPtr < (secPtr + secSize);) {
         if (!nextPtr) break;
         
@@ -74,17 +77,27 @@ size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
         for (int i = 0; i < patterns.size(); i++) {
             patternPtr = find_pattern(nextPtr, nextSize, patterns.at(i).buf, patterns.at(i).size);
             if (!patternPtr) {
-                continue;
-            }
-            offset_t offset1 = m_PE->getOffset(patternPtr);
-            if (offset1 == INVALID_ADDR) {
+                //try with another pattern
                 continue;
             }
             //pattern found!
             patternSize =  patterns.at(i).size;
-            prologOffsets.insert(offset1);
+            //check for eventual hotpatch prolog:
+            if ((patternPtr - secPtr) >= hotpatch.size) {
+                BYTE *hotPatchPtr = patternPtr - hotpatch.size;
+                if (memcmp(hotPatchPtr, hotpatch.buf, hotpatch.size) == 0) {
+                    patternPtr = hotPatchPtr;
+                    patternSize += hotpatch.size;
+                }
+            }
+            //advance the search:
             nextPtr = patternPtr + patternSize;
-            break;
+            
+            offset_t offset1 = m_PE->getOffset(patternPtr);
+            if (offset1 != INVALID_ADDR) {
+                prologOffsets.insert(offset1);
+                break;
+            }
         }
         //none of the pattern was found, break:
         if (!patternPtr || !patternSize) break;
