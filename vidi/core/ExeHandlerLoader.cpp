@@ -23,7 +23,7 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         offset_t prologOffset = *pItr;
         
         offset_t prologOffsetRVA = exe->convertAddr(prologOffset, Executable::RAW, Executable::RVA);
-        QString name = "func_" + QString::number(prologOffsetRVA, 16);
+        QString name = "func_" + QString::number(prologOffsetRVA, 16).toUpper();
         
         tracer->defineFunction(prologOffset, Executable::RAW, name);
         tracer->resolveOffset(prologOffset, Executable::RAW);
