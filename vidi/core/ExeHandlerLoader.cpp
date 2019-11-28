@@ -1,7 +1,8 @@
 #include "ExeHandlerLoader.h"
 
 #define MAX_TRACE_DEPTH 3
-#define MAX_TRACE_UNSOLVED 200
+#define MAX_TRACE_UNSOLVED 1000
+#define MIN_TRACE_RESOLVED 10
 
 bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
 {
@@ -13,13 +14,22 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         return false;
     }
     connect(tracer, SIGNAL(loadingProgress(int)), this, SLOT(onTracerLoadingProgress(int)));
-    tracer->traceEntrySection();
+    
+    QMap<offset_t,QString> entrypoints;
+    size_t epCount = exe->getAllEntryPoints(entrypoints, Executable::RAW);
 
-    const offset_t epRaw = exe->getEntryPoint(Executable::RAW);
-    tracer->defineFunction(epRaw, Executable::RAW, "START");
-    tracer->resolveOffset(epRaw, Executable::RAW);
-
+    QMap<offset_t,QString>::const_iterator itr;
+    for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); itr++) {
+        
+        const offset_t epRaw = itr.key();
+        const QString name = itr.value();
+        tracer->defineFunction(epRaw, Executable::RAW, name);
+        tracer->resolveOffset(epRaw, Executable::RAW);
+    }
     tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
+    
+    tracer->traceEntrySection();
+    tracer->resolveUnsolved(MAX_TRACE_DEPTH, 200);
     return true;   
 }
 
