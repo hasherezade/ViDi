@@ -6,6 +6,24 @@ using namespace minidis;
 #define MAX_CHUNKS 10000
 
 //----
+class Pattern {
+public:
+    Pattern()
+        : buf(NULL), size(0)
+    {
+    }
+    
+    Pattern(BYTE *bufPtr, size_t bufSize)
+    {
+        this->buf = bufPtr;
+        this->size = bufSize;
+    }
+    
+    BYTE* buf;
+    size_t size;
+};
+
+//----
 //protected:
 size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
 {
@@ -37,6 +55,11 @@ size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
         0x48, 0x83, 0xEC // SUB RSP, ??
     };
     
+    QVector<Pattern> patterns;
+    patterns.push_back(Pattern(prolog32_pattern, sizeof(prolog32_pattern)));
+    patterns.push_back(Pattern(prolog32_2_pattern, sizeof(prolog32_2_pattern)));
+    patterns.push_back(Pattern(prolog64_pattern, sizeof(prolog64_pattern)));
+    
     BYTE *nextPtr = secPtr;
     size_t nextSize = secSize;
     
@@ -44,40 +67,29 @@ size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
         if (!nextPtr) break;
         
         size_t nextSize = secSize - (nextPtr - secPtr);
+        BYTE *patternPtr = NULL;
         size_t patternSize = 0;
-        BYTE *patternPtr = find_pattern(nextPtr, nextSize, prolog32_pattern, sizeof(prolog32_pattern));
-        if (patternPtr) {
-            patternSize = sizeof(prolog32_pattern);
-            offset_t offset1 = m_PE->getOffset(patternPtr);
-            if (offset1 != INVALID_ADDR) {
-                prologOffsets.insert(offset1);
-                nextPtr = patternPtr + patternSize;
-                continue;
-            }
-        }
         
-        patternPtr = find_pattern(nextPtr, nextSize, prolog32_2_pattern, sizeof(prolog32_2_pattern));
-        if (patternPtr) {
-            patternSize = sizeof(prolog32_2_pattern);
-            offset_t offset1 = m_PE->getOffset(patternPtr);
-            if (offset1 != INVALID_ADDR) {
-                prologOffsets.insert(offset1);
-                nextPtr = patternPtr + patternSize;
+        //search by stored patterns:
+        for (int i = 0; i < patterns.size(); i++) {
+            patternPtr = find_pattern(nextPtr, nextSize, patterns.at(i).buf, patterns.at(i).size);
+            if (!patternPtr) {
                 continue;
             }
+            offset_t offset1 = m_PE->getOffset(patternPtr);
+            if (offset1 == INVALID_ADDR) {
+                continue;
+            }
+            //pattern found!
+            patternSize =  patterns.at(i).size;
+            prologOffsets.insert(offset1);
+            nextPtr = patternPtr + patternSize;
+            break;
         }
+        //none of the pattern was found, break:
+        if (!patternPtr || !patternSize) break;
         
-        patternPtr = find_pattern(nextPtr, nextSize, prolog64_pattern, sizeof(prolog64_pattern));
-        if (patternPtr) {
-            patternSize = sizeof(prolog64_pattern);
-            offset_t offset1 = m_PE->getOffset(patternPtr);
-            if (offset1 != INVALID_ADDR) {
-                prologOffsets.insert(offset1);
-                nextPtr = patternPtr + patternSize;
-                continue;
-            }
-        }
-        break;
+        //otherwise search for the next occurence...
     }
     return prologOffsets.size() - initialSize;
 }
