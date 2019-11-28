@@ -31,7 +31,9 @@ set (hdrs
     include/DisasmBase.h
     include/Tracer.h
     ExeDisasm.h
+    Util.h
 )
+
 if (VIDI_USE_UDIS86)
     set (ud_hdrs
         udis/UdisChunk.h
@@ -59,6 +61,7 @@ set (srcs
     DisasmChunk.cpp
     DisasmChunkBuf.cpp
     Tracer.cpp
+    Util.cpp
 )
 
 set (cd_srcs

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore>
+#include <QSet>
 #include <vector>
 #include <bearparser.h>
 
@@ -194,6 +195,7 @@ public:
         return m_referedStrings[offset];
     }
     
+    virtual size_t findAllPrologs(QSet<offset_t> &prologOffsets) { return 0; }
     virtual void traceEntrySection() = 0;
     virtual bool traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd = true) = 0;
     virtual bool defineFunction(offset_t offset, Executable::addr_type aType, QString name);
