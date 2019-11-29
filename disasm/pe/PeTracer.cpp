@@ -3,6 +3,7 @@
 
 using namespace minidis;
 
+// maximal number of chunks that the disassembler is allowed to generate at the time
 #define MAX_CHUNKS 10000
 
 //----
@@ -50,16 +51,34 @@ size_t PeTracer::findAllPrologs(QSet<offset_t> &prologOffsets)
         0x89, 0xE5 // MOV EBP, ESP
     };
     
-    BYTE prolog64_pattern[] = {
+    BYTE prolog64_pattern_0[] = {
+        0x55, // PUSH RBP
+        0x48, 0x8b, 0xEC // MOV RBP, RSP
+    };
+    
+    BYTE prolog64_pattern_1[] = {
         0x40, 0x53, // PUSH RBX
         0x48, 0x83, 0xEC // SUB RSP, ??
     };
     
+    BYTE prolog64_pattern_2[] = {
+        0x40, 0x55, // PUSH ??
+        0x48, 0x83, 0xEC // SUB RSP, ??
+    };
+    
+    BYTE prolog64_pattern_3[] = {
+        0x48, 0x83, 0xEC // SUB RSP, ??
+    };
+    //TODO: make a pattern covering all the cases
     QVector<Pattern> patterns;
     patterns.push_back(Pattern(prolog32_pattern, sizeof(prolog32_pattern)));
     patterns.push_back(Pattern(prolog32_2_pattern, sizeof(prolog32_2_pattern)));
-    patterns.push_back(Pattern(prolog64_pattern, sizeof(prolog64_pattern)));
-    
+    if (m_PE->isBit64()) {
+        patterns.push_back(Pattern(prolog64_pattern_0, sizeof(prolog64_pattern_0)));
+        patterns.push_back(Pattern(prolog64_pattern_1, sizeof(prolog64_pattern_1)));
+        patterns.push_back(Pattern(prolog64_pattern_2, sizeof(prolog64_pattern_2)));
+        patterns.push_back(Pattern(prolog64_pattern_3, sizeof(prolog64_pattern_3)));
+    }
     BYTE *nextPtr = secPtr;
     size_t nextSize = secSize;
     
