@@ -12,11 +12,11 @@ Supports: PE 32/64 bit, DOS MZ
 **[Issues](https://github.com/hasherezade/ViDi/issues)**
 
 Requires:
-+ Qt5 Core
-+ Qt5 Widget
-+ bearparser
-+ capstone (eventually: udis86)
-+ [cmake](http://www.cmake.org)
++   Qt5 Core
++   Qt5 Widget
++   bearparser
++   capstone (eventually: udis86)
++   [cmake](http://www.cmake.org)
 
 To build it on Linux or MacOS you can use the given script - it automatically downloads this repository and all the dependencies:<br/>
 [vidi_autobuild.sh](https://raw.githubusercontent.com/hasherezade/ViDi/master/vidi_autobuild.sh)
