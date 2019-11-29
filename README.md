@@ -16,9 +16,9 @@ Requires:
 + Qt5 Widgets<br/>
 + bearparser
 + capstone (eventually: udis86)
-+ cmake http://www.cmake.org/<br/>
++ [cmake](http://www.cmake.org)
 
 To build it on Linux or MacOS you can use the given script - it automatically downloads this repository and all the dependencies:<br/>
-https://github.com/hasherezade/ViDi/blob/master/vidi_autobuild.sh<br/>
+[https://raw.githubusercontent.com/hasherezade/ViDi/master/vidi_autobuild.sh](vidi_autobuild.sh)
 
-Read more: https://hshrzd.wordpress.com/vidi-visual-disassembler/
+Project website: [vidi.hasherezade.net](https://vidi.hasherezade.net)
