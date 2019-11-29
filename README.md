@@ -12,8 +12,8 @@ Supports: PE 32/64 bit, DOS MZ
 **[Issues](https://github.com/hasherezade/ViDi/issues)**
 
 Requires:
-+ Qt5 Core<br/>
-+ Qt5 Widgets<br/>
++ Qt5 Core
++ Qt5 Widget
 + bearparser
 + capstone (eventually: udis86)
 + [cmake](http://www.cmake.org)
