@@ -23,6 +23,7 @@ public:
         m_nameManager(this), m_funcManager(this), m_impFuncManager(this)
     {
         m_bitMode = m_Exe->getBitMode();
+        m_maxDisasmElements = 0x1000;
     }
 
     virtual ~Tracer() {}
@@ -250,7 +251,7 @@ protected:
     size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
     virtual size_t resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
-    bool makeDisasmAt(Executable* exe, offset_t raw, bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL);
+    bool makeDisasmAt(Executable* exe, offset_t raw, bool stopAtBlockEnd, size_t maxElements);
     
     void addReferencedTargets(offset_t currOffset, offset_t target, DisasmChunk *chunk);
     void traceArea(offset_t start);
@@ -292,6 +293,8 @@ protected:
 
     Executable::exe_bits m_bitMode;
     Executable *m_Exe;
+    
+    size_t m_maxDisasmElements;
 
 }; /* class Tracer */
 

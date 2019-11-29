@@ -25,7 +25,7 @@ public:
     }
 
     bool init(const offset_t startOffset, const bufsize_t disasmSize, Executable::exe_bits bitMode);
-    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL);
+    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements);
 
 protected:
     virtual size_t disasmNext();

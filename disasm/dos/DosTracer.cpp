@@ -18,7 +18,7 @@ bool DosTracer::traceFunction(offset_t offset, Executable::addr_type aType, QStr
     const offset_t start = this->convertAddr(offset, aType, Executable::RAW);
     if (start == INVALID_ADDR) return false;
 
-    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd)) {
+    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd, m_maxDisasmElements)) {
         return false;
     }
     traceArea(start);
