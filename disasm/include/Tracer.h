@@ -52,7 +52,7 @@ public:
         return dis->getMnemTypeAtOffset(offset, inType);
     }
 
-    QString getHexString(offset_t offset, Executable::addr_type aType)
+    QString _getHexString(offset_t offset, Executable::addr_type aType)
     {
         offset = this->convertAddr(offset, aType, Executable::RAW);
         DisasmBase* dis = getDisasmAt(offset);
@@ -63,9 +63,25 @@ public:
 
         DisasmChunk *chunk = dis->getChunkAtIndex(index);
         if (!chunk) return ":(";
-        return dis->getChunkAtIndex(index)->toHexString();
+        
+        return chunk->toHexString();
     }
+    
+    ByteBuffer* getChunkBytes(offset_t offset, Executable::addr_type aType) const
+    {
+        offset = this->convertAddr(offset, aType, Executable::RAW);
+        DisasmBase* dis = getDisasmAt(offset);
+        if (!dis) return NULL;
 
+        size_t index = dis->m_disasmBuf.offsetToIndex(offset);
+        if (index == INVALID_INDEX) return NULL;
+
+        DisasmChunk *chunk = dis->getChunkAtIndex(index);
+        if (!chunk) return NULL;
+        
+        return chunk->getBytes();
+    }
+    
     QString translateBranching(DisasmBase* dis, const size_t index, FuncNameManager *nameManager) const;
 
     virtual QString getDisasmString(offset_t offset, Executable::addr_type aType)

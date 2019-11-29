@@ -4,6 +4,28 @@
 #include <QMenu>
 #include "DisasmBlockModel.h"
 
+
+class DisasmModelSettings
+{
+public:
+    DisasmModelSettings()
+    {
+        isShowHex = true;
+        isShowPrintables = true;
+    }
+    
+    DisasmModelSettings(bool _isShowHex, bool _isShowPrintables)
+    {
+        isShowHex = _isShowHex;
+        isShowPrintables = _isShowPrintables;
+    }
+    
+    bool isShowHex;
+    bool isShowPrintables;
+};
+
+///
+
 class DisasmModel : public DisasmBlockModel
 {
     Q_OBJECT
@@ -56,4 +78,10 @@ public:
         return false;
     }
     
+protected:
+    QString getHexString(offset_t offset, Executable::addr_type aType) const;
+    QString printBytes(ByteBuffer* buf, bool isHex, bool skipPrintable) const;
+    
+        
+    DisasmModelSettings m_modelSettings;
 };

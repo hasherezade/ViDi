@@ -15,11 +15,16 @@ class DisasmChunk : public AddrConverter {
 public:
     const static size_t MAX_ARG_NUM;
 
-    DisasmChunk(offset_t startOffset,Executable *parent)
-        : m_Exe(parent), m_startOffset(startOffset), m_bitMode(parent->getBitMode())
-    {}
+    DisasmChunk(offset_t startOffset, Executable *parent)
+        : m_Exe(parent), m_startOffset(startOffset), m_bitMode(parent->getBitMode()),
+        m_byteBuf(NULL)
+    {
+    }
 
-    virtual ~DisasmChunk() {}
+    virtual ~DisasmChunk()
+    {
+        delete m_byteBuf;
+    }
 
     /*inherited from AddrConverter */
     virtual offset_t convertAddr(offset_t off, Executable::addr_type inType, Executable::addr_type outType) const
@@ -58,9 +63,13 @@ public:
         if (m_hexStr.length() == 0) initStrings(); 
         return m_hexStr;
     }
-
+    
+    ByteBuffer* getBytes() const
+    {
+        return this->m_byteBuf;
+    }
+    
     virtual mnem_type getMnemType() const { return this->m_mnemType; }
-
 
     virtual bool isBranching() const;
     virtual bool isConditionalBranching() const;
@@ -73,25 +82,31 @@ public:
     offset_t getTargetAddr() const { return this->m_targetVal.getTargetAddr(); }
     Executable::addr_type getTargetAddrType() const { return m_targetVal.getAddrType(); }
     bool isTargetImm() const {return m_targetVal.isImm(); }
-
-protected:
-    QString printBytes(const uint8_t* buf, const size_t size) const
+    
+    QString printBytes(bool isHex = false, bool skipPrintable = false) const
     {
-        QString str;
+        Formatter formatter(m_byteBuf);
+        formatter.setHex(false);
+        formatter.setSkipNonPrintable(true);
+        
+        const size_t size = m_byteBuf->getContentSize();
+        
+        QString str = "";
         for (size_t i = 0; i < size; i++) {
-            const uint8_t num = buf[i];
-            str += QString::number(num, 16).leftJustified(2,'0');
+            str += formatter[i];
         }
         return str;
     }
-    //---
-    /*
-    virtual void init()
+    
+    protected:
+    void setByteBuffer(const uint8_t* buf, const size_t size)
     {
-        m_mnemType = fetchMnemType();
-        m_targetVal = fetchTargetAddr();
+        if (m_byteBuf) {
+            return;
+        }
+        m_byteBuf = new ByteBuffer((BYTE*)buf, size, 0);
     }
-    */
+    //---
     virtual void initStrings() = 0;
 
     virtual mnem_type fetchMnemType() const = 0;
@@ -136,6 +151,8 @@ protected:
 
     QString m_disasmString, m_hexStr;
     mnem_type m_mnemType;
+    
+    ByteBuffer *m_byteBuf;
 
     Executable::exe_bits m_bitMode;
     Executable* m_Exe;

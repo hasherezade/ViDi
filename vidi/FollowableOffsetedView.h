@@ -123,7 +123,10 @@ protected slots:
         offset_t currentOffset = getSelectedOffset();
         if (currentOffset == INVALID_ADDR) return;
 
-        m_contextActions[ACTION_FOLLOW]->setText("Follow "+ translateAddrTypeName(m_targetAddrType) +": "+ QString::number(currentOffset, 16));
+        m_contextActions[ACTION_FOLLOW]->setText(
+            "Follow "+ translateAddrTypeName(m_targetAddrType) +
+            ": "+ QString::number(currentOffset, 16));
+        
         m_ContextMenu.exec(mapToGlobal(p));
     }
 

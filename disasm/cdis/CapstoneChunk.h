@@ -17,6 +17,8 @@ public:
         m_maxArgs = insn.detail->x86.op_count;
         m_mnemType = fetchMnemType();
         m_targetVal = fetchTargetAddr(insn.detail);
+        
+        setByteBuffer(m_insn.bytes, m_insn.size);
     }
 
     virtual bufsize_t getChunkSize() const{ return this->m_insn.size; }
@@ -26,7 +28,7 @@ protected:
     virtual void initStrings()
     {
         m_disasmString = QString(m_insn.mnemonic) + " " + QString(m_insn.op_str);
-        m_hexStr = printBytes((uint8_t*) m_insn.bytes, m_insn.size);
+        m_hexStr = printBytes();
     }
 
     virtual size_t getMaxArg() { return m_maxArgs; }

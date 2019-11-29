@@ -22,6 +22,30 @@ QVariant DisasmModel::headerData(int section, Qt::Orientation orientation, int r
     return QVariant();
 }
 
+QString DisasmModel::printBytes(ByteBuffer* buf, bool isHex, bool skipPrintable) const
+{
+    Formatter formatter(buf);
+    formatter.setHex(isHex);
+    formatter.setSkipNonPrintable(skipPrintable);
+        
+    const size_t size = buf->getContentSize();
+        
+    QString str = "";
+    for (size_t i = 0; i < size; i++) {
+        str += formatter[i];
+    }
+    return str;
+}
+
+QString DisasmModel::getHexString(offset_t offset, Executable::addr_type aType) const
+{
+    ByteBuffer* buf = getTracer()->getChunkBytes(offset, aType);
+    if (!buf) {
+        return ":(";
+    }
+    return printBytes(buf, m_modelSettings.isShowHex, m_modelSettings.isShowPrintables);
+}
+
 QVariant DisasmModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) return false;
@@ -67,7 +91,7 @@ QVariant DisasmModel::data(const QModelIndex &index, int role) const
             return getFormatedOffset(offset);
         case COL_HEX:
         {
-            return getTracer()->getHexString(offset, Executable::RAW);
+            return getHexString(offset, Executable::RAW);
         }
         case COL_CODE :
         {
