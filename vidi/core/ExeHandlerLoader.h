@@ -22,7 +22,7 @@ private slots:
 
     void onTracerLoadingProgress(int progress) 
     {
-        updateProgress(progress * 0.5);
+        updateProgress(progress*0.1);
     }
 
 public:
@@ -40,8 +40,8 @@ protected:
     void updateProgress(int increment)
     {
         m_loadingProgress += increment;
+        m_loadingProgress %= 100;
         emit loadingProgress(m_loadingProgress);
-        //emit loadingProgress(m_fileName, m_loadingProgress);
     }
 
     int m_loadingProgress;

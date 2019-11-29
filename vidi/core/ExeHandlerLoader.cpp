@@ -17,6 +17,7 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
     
     QSet<offset_t> prologs;
     tracer->findAllPrologs(prologs);
+    updateProgress(5);
     
     QSet<offset_t>::const_iterator pItr;
     for (pItr = prologs.constBegin(); pItr != prologs.constEnd(); pItr++) {
@@ -27,8 +28,9 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         
         tracer->defineFunction(prologOffset, Executable::RAW, name);
         tracer->resolveOffset(prologOffset, Executable::RAW);
+        updateProgress(1);
     }
-    
+
     QMap<offset_t,QString> entrypoints;
     size_t epCount = exe->getAllEntryPoints(entrypoints, Executable::RAW);
 
@@ -39,7 +41,10 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         const QString name = itr.value();
         tracer->defineFunction(epRaw, Executable::RAW, name);
         tracer->resolveOffset(epRaw, Executable::RAW);
+        updateProgress(1);
     }
+    tracer->traceEntrySection();
+    updateProgress(5);
     tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
     return true;   
 }
@@ -57,6 +62,7 @@ bool ExeHandlerLoader::parse(QString &fileName)
         if (buf == NULL) {
             return false;
         }
+        updateProgress(10);
         ExeFactory::exe_type exeType = ExeFactory::findMatching(buf);
         if (exeType == ExeFactory::NONE) {
             delete buf;
@@ -65,11 +71,11 @@ bool ExeHandlerLoader::parse(QString &fileName)
 
         Executable *exe = ExeFactory::build(buf, exeType);
         //printf("Exe loaded\n");
-        updateProgress(10);
+        updateProgress(5);
 
         exeHndl = new ExeHandler(buf, exe);
         //printf("ExeHndl loaded\n");
-        updateProgress(20);
+        updateProgress(10);
 
         if (exeHndl) {
             exeHndl->setFileName(fileName);
