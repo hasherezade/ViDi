@@ -32,7 +32,7 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
     }
 
     QMap<offset_t,QString> entrypoints;
-    size_t epCount = exe->getAllEntryPoints(entrypoints, Executable::RAW);
+    exe->getAllEntryPoints(entrypoints, Executable::RAW);
 
     QMap<offset_t,QString>::const_iterator itr;
     for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); itr++) {
