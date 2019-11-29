@@ -9,7 +9,7 @@ bool Tracer::resolveOffset(offset_t offset, Executable::addr_type aType)
     offset_t raw = this->convertAddr(offset, aType, Executable::RAW);
     if (this->getDisasmAt(raw, Executable::RAW)) return true;
 
-    if (!this->makeDisasmAt(m_Exe, raw, true, m_maxDisasmElements)) {
+    if (!this->makeDisasmAt(m_Exe, raw, this->functionTraceSettings)) {
         return false; //FAILED
     }
     this->traceArea(raw);
@@ -77,7 +77,7 @@ size_t Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
         offset_t uOff = *oItr;
         if (uOff == INVALID_ADDR) continue;
         if (!getDisasmAt(uOff)) {
-            if (this->makeDisasmAt(m_Exe, uOff, true, m_maxDisasmElements)) {
+            if (this->makeDisasmAt(m_Exe, uOff, this->functionTraceSettings)) {
                 traceArea(uOff);
                 added++;
             }
@@ -310,7 +310,7 @@ DisasmBase* Tracer::getDisasmAt(offset_t offset, Executable::addr_type inType) c
     return NULL;
 }
 
-bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, bool stopAtBlockEnd, size_t maxElements)
+bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, TracerSettings &settings)
 {
     //printf("Disasm making at %x\n", offset);
     DisasmBase *disasm = getDisasmAt(offset);
@@ -321,7 +321,7 @@ bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, bool stopAtBlockEnd,
     }
     disasm = m_offsetToDisasm[offset];
     //printf("Filling table...\n");
-    disasm->fillTable(stopAtBlockEnd, maxElements);
+    disasm->fillTable(settings.m_stopAtBlockEnd, settings.m_maxDisasmElements);
     return true;
 }
 

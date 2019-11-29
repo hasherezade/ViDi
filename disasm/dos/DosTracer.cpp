@@ -2,23 +2,21 @@
 
 using namespace minidis;
 
-#define MAX_CHUNKS 10000
-
 //----
 
 void DosTracer::traceEntrySection()
 {
     const offset_t codeStart = this->m_dos->convertAddr(0, Executable::RVA, Executable::RAW);
-    makeDisasmAt(m_dos, codeStart, false, MAX_CHUNKS);
+    makeDisasmAt(m_dos, codeStart, this->sectionTraceSettings);
     traceArea(codeStart);
 }
 
-bool DosTracer::traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd)
+bool DosTracer::traceFunction(offset_t offset, Executable::addr_type aType, QString name)
 {
     const offset_t start = this->convertAddr(offset, aType, Executable::RAW);
     if (start == INVALID_ADDR) return false;
 
-    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd, m_maxDisasmElements)) {
+    if (!makeDisasmAt(m_Exe, start, this->functionTraceSettings)) {
         return false;
     }
     traceArea(start);
