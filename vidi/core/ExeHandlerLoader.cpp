@@ -15,10 +15,21 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
     }
     connect(tracer, SIGNAL(loadingProgress(int)), this, SLOT(onTracerLoadingProgress(int)));
     
-    QSet<offset_t> prologs;
-    tracer->findAllPrologs(prologs);
+    tracer->traceEntrySection();
     updateProgress(5);
     
+    QSet<offset_t> prologs;
+    size_t prologsCount = tracer->findAllPrologs(prologs);
+    std::cout << "Found prologs: " << std::dec << prologsCount << "\n";
+    
+    QMap<offset_t, QString> entrypoints;
+    const size_t entryPointsCount = exe->getAllEntryPoints(entrypoints, Executable::RAW);
+    updateProgress(1);
+    std::cout << "Found entryPoints: " << std::dec << entryPointsCount << "\n";
+    
+    size_t totalFunctions = prologsCount + entryPointsCount;
+    
+    int added = 0;
     QSet<offset_t>::const_iterator pItr;
     for (pItr = prologs.constBegin(); pItr != prologs.constEnd(); pItr++) {
         offset_t prologOffset = *pItr;
@@ -28,20 +39,27 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         
         tracer->defineFunction(prologOffset, Executable::RAW, name);
         tracer->resolveOffset(prologOffset, Executable::RAW);
-        updateProgress(1);
+        
+        added++;
+        if (added >= (0.1 * totalFunctions)) {
+            updateProgress(1);
+            added = 0;
+        }
     }
-
-    QMap<offset_t,QString> entrypoints;
-    exe->getAllEntryPoints(entrypoints, Executable::RAW);
-
     QMap<offset_t,QString>::const_iterator itr;
     for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); itr++) {
         const offset_t epRaw = itr.key();
         const QString name = itr.value();
         tracer->defineFunction(epRaw, Executable::RAW, name);
         tracer->resolveOffset(epRaw, Executable::RAW);
-        updateProgress(1);
+        
+        added++;
+        if (double(added) >= (0.1 * totalFunctions)) {
+            updateProgress(1);
+            added = 0;
+        }
     }
+    
     tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
     updateProgress(5);
     return true;   
