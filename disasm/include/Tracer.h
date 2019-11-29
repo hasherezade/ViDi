@@ -8,7 +8,25 @@
 #include "CodeBlock.h"
 #include "DisasmBase.h"
 
+#define MAX_CHUNKS 0x1000
+
 namespace minidis {
+    
+    class TracerSettings {
+    public:
+        TracerSettings()
+        {
+           m_maxDisasmElements = MAX_CHUNKS;
+           m_stopAtBlockEnd = true;
+        }
+        
+    protected:
+        size_t m_maxDisasmElements;
+        bool m_stopAtBlockEnd;
+        
+        friend class Tracer;
+    };
+    
 
 class Tracer : public QObject, public AddrConverter
 {
@@ -20,10 +38,13 @@ signals:
 public:
     Tracer(Executable *exe) : QObject(), AddrConverter(),
         m_Exe(exe),
-        m_nameManager(this), m_funcManager(this), m_impFuncManager(this)
+        m_nameManager(this), m_funcManager(this), m_impFuncManager(this),
+        functionTraceSettings(), sectionTraceSettings()
     {
         m_bitMode = m_Exe->getBitMode();
-        m_maxDisasmElements = 0x1000;
+        
+        functionTraceSettings.m_stopAtBlockEnd = true;
+        sectionTraceSettings.m_stopAtBlockEnd = false;
     }
 
     virtual ~Tracer() {}
@@ -198,7 +219,7 @@ public:
     
     virtual size_t findAllPrologs(QSet<offset_t> &prologOffsets) { return 0; }
     virtual void traceEntrySection() = 0;
-    virtual bool traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd = true) = 0;
+    virtual bool traceFunction(offset_t offset, Executable::addr_type aType, QString name) = 0;
     virtual bool defineFunction(offset_t offset, Executable::addr_type aType, QString name);
 
     QList<offset_t>& getFunctionsList() { return m_funcManager.list(); }
@@ -251,7 +272,7 @@ protected:
     size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
     virtual size_t resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
-    bool makeDisasmAt(Executable* exe, offset_t raw, bool stopAtBlockEnd, size_t maxElements);
+    bool makeDisasmAt(Executable* exe, offset_t raw, TracerSettings &settings);
     
     void addReferencedTargets(offset_t currOffset, offset_t target, DisasmChunk *chunk);
     void traceArea(offset_t start);
@@ -294,7 +315,8 @@ protected:
     Executable::exe_bits m_bitMode;
     Executable *m_Exe;
     
-    size_t m_maxDisasmElements;
+    TracerSettings functionTraceSettings;
+    TracerSettings sectionTraceSettings;
 
 }; /* class Tracer */
 

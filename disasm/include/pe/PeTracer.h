@@ -15,7 +15,7 @@ public:
         : Tracer(exe) , m_PE(exe){ }
 
     void traceEntrySection();
-    bool traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd = true);
+    bool traceFunction(offset_t offset, Executable::addr_type aType, QString name);
 
     virtual bool isImportedFunction(offset_t offset, Executable::addr_type aType) const
     {

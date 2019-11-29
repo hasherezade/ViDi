@@ -133,16 +133,16 @@ void PeTracer::traceEntrySection()
     if (!hdr) return;
 
     const offset_t secStart = hdr->getContentOffset(Executable::RAW, false);
-    makeDisasmAt(m_Exe, secStart, false, MAX_CHUNKS);
+    makeDisasmAt(m_Exe, secStart, sectionTraceSettings);
     traceArea(secStart);
 }
 
-bool PeTracer::traceFunction(offset_t offset, Executable::addr_type aType, QString name, bool stopAtBlockEnd)
+bool PeTracer::traceFunction(offset_t offset, Executable::addr_type aType, QString name)
 {
     const offset_t start = this->convertAddr(offset, aType, Executable::RAW);
     if (start == INVALID_ADDR) return false;
 
-    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd, m_maxDisasmElements)) {
+    if (!makeDisasmAt(m_Exe, start, functionTraceSettings)) {
         return false;
     }
     traceArea(start);
