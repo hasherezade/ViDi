@@ -7,8 +7,6 @@
 #include "Context.h"
 #include "TargetValue.h"
 
-#define DEFAULT_MAX_EL 10000
-
 namespace minidis {
 
 class DisasmChunk : public AddrConverter {
