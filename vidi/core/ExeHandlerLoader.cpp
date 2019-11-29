@@ -36,16 +36,14 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
 
     QMap<offset_t,QString>::const_iterator itr;
     for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); itr++) {
-        
         const offset_t epRaw = itr.key();
         const QString name = itr.value();
         tracer->defineFunction(epRaw, Executable::RAW, name);
         tracer->resolveOffset(epRaw, Executable::RAW);
         updateProgress(1);
     }
-    tracer->traceEntrySection();
-    updateProgress(5);
     tracer->resolveUnsolved(MAX_TRACE_DEPTH, MAX_TRACE_UNSOLVED);
+    updateProgress(5);
     return true;   
 }
 
