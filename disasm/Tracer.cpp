@@ -9,7 +9,7 @@ bool Tracer::resolveOffset(offset_t offset, Executable::addr_type aType)
     offset_t raw = this->convertAddr(offset, aType, Executable::RAW);
     if (this->getDisasmAt(raw, Executable::RAW)) return true;
 
-    if (!this->makeDisasmAt(m_Exe, raw, true)) {
+    if (!this->makeDisasmAt(m_Exe, raw, true, m_maxDisasmElements)) {
         return false; //FAILED
     }
     this->traceArea(raw);
@@ -77,7 +77,7 @@ size_t Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
         offset_t uOff = *oItr;
         if (uOff == INVALID_ADDR) continue;
         if (!getDisasmAt(uOff)) {
-            if (this->makeDisasmAt(m_Exe, uOff, true)) {
+            if (this->makeDisasmAt(m_Exe, uOff, true, m_maxDisasmElements)) {
                 traceArea(uOff);
                 added++;
             }

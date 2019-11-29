@@ -7,9 +7,6 @@
 #include "AddrConverter.h"
 #include "FuncNameManager.h"
 
-
-#define DEFAULT_MAX_EL 10000
-
 namespace minidis {
 //------------------------------------------------
 
@@ -48,7 +45,13 @@ public:
     
     virtual bool isBranching(offset_t offset, Executable::addr_type aType) = 0;
     
-    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL) = 0;
+    /**
+     * @brief fill table of disassembly chunks
+     * @param stopAtBlockEnd: should filling table stop when the block terminator detected
+     * @param maxElements: maximal number of disasembled lines - once the number is crossed, filling table will stop at block end.
+     * @return true if successful
+     */
+    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements) = 0;
 
     virtual void clearTable()
     {

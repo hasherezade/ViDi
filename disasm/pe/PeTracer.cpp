@@ -4,7 +4,7 @@
 using namespace minidis;
 
 // maximal number of chunks that the disassembler is allowed to generate at the time
-#define MAX_CHUNKS 10000
+#define MAX_CHUNKS 1000
 
 //----
 class Pattern {
@@ -142,7 +142,7 @@ bool PeTracer::traceFunction(offset_t offset, Executable::addr_type aType, QStri
     const offset_t start = this->convertAddr(offset, aType, Executable::RAW);
     if (start == INVALID_ADDR) return false;
 
-    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd)) {
+    if (!makeDisasmAt(m_Exe, start, stopAtBlockEnd, m_maxDisasmElements)) {
         return false;
     }
     traceArea(start);
