@@ -153,19 +153,29 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
     offset_t newOffset = startOffset;
     CodeBlock* block = NULL;
 
+    const bool skipExisting = true;
     for (size_t index = startIndex; index < disasmSize; index++)
     {
         if (!block) {
             CodeBlock *existingBlock = this->blockStartingAt(newOffset, Executable::RAW);
             if (existingBlock) {
-                //std::cout <<std::hex << "[WARNING][" << newOffset << "] A block starting at this offset already exist!\n";
-                break;
+                if (!skipExisting) {
+                    std::cout <<std::hex << "[WARNING][" << newOffset << "] A block starting at this offset already exist!\n";
+                    break;
+                }
+                offset_t endOffset = existingBlock->getEndOffset();
+                if (endOffset == INVALID_ADDR) break;
+                
+                int lastIndx = existingBlock->getIndexOf(endOffset);
+                if (lastIndx == INVALID_INDEX) break;
+                newOffset = disasm->getNextOffset(index);
+                //std::cout << "Skipping to next offset: " << std::hex << newOffset << "\n";
+                continue;
             }
             block = getOrMakeCodeBlockAt(newOffset);
             if (!block) break;
             //std::cout << "New block: " << std::hex << newOffset << std::endl;
         }
-        
         DisasmChunk *chunk = disasm->getChunkAtIndex(index);
         if (!chunk) break;
 
@@ -220,7 +230,6 @@ void Tracer::traceBlocks(DisasmBase* disasm, offset_t startOffset)
         if (block->size == 0) {
             if (mType == MT_INT3) block->markInvalid();
         }
-        
         newOffset = disasm->getNextOffset(index);
         //reset block:
         block = NULL;
