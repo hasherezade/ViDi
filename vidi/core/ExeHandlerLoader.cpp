@@ -70,22 +70,22 @@ bool ExeHandlerLoader::parse(QString &fileName)
         }
 
         Executable *exe = ExeFactory::build(buf, exeType);
-        //printf("Exe loaded\n");
         updateProgress(5);
 
         exeHndl = new ExeHandler(buf, exe);
-        //printf("ExeHndl loaded\n");
         updateProgress(10);
 
-        if (exeHndl) {
-            exeHndl->setFileName(fileName);
-            isLoaded = true;
-            trace(*exeHndl);
+        if (!exeHndl) {
+            return false;
         }
+        exeHndl->setFileName(fileName);
+        isLoaded = true;
+        trace(*exeHndl);
+        
+        emit loaded(exeHndl);
 
     } catch (CustomException &e) { }
 
-    emit loaded(exeHndl);
     return isLoaded;
 }
 //----

@@ -13,13 +13,8 @@ class ExeHandlerLoader : public FileLoader
     Q_OBJECT
 signals:
     void loaded(ExeHandler *exeHndl);
-    //void loadingProgress(QString fileName, int progress);
 
 private slots:
-    void onLoadingProgress(QString fileName, int progress) {
-        //printf("#Emited progress: %d\n", progress);
-    }
-
     void onTracerLoadingProgress(int progress) 
     {
         updateProgress(progress*0.1);
