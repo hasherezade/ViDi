@@ -3,9 +3,6 @@
 
 using namespace minidis;
 
-// maximal number of chunks that the disassembler is allowed to generate at the time
-#define MAX_CHUNKS 1000
-
 //----
 class Pattern {
 public:

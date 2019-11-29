@@ -8,7 +8,9 @@
 #include "CodeBlock.h"
 #include "DisasmBase.h"
 
-#define MAX_CHUNKS 0x1000
+
+// maximal number of chunks that the disassembler is allowed to generate at the time
+#define MAX_DISASM_EL 1000
 
 namespace minidis {
     
@@ -16,7 +18,7 @@ namespace minidis {
     public:
         TracerSettings()
         {
-           m_maxDisasmElements = MAX_CHUNKS;
+           m_maxDisasmElements = MAX_DISASM_EL;
            m_stopAtBlockEnd = true;
         }
         
@@ -43,7 +45,7 @@ public:
     {
         m_bitMode = m_Exe->getBitMode();
         
-        functionTraceSettings.m_stopAtBlockEnd = true;
+        functionTraceSettings.m_stopAtBlockEnd = true; 
         sectionTraceSettings.m_stopAtBlockEnd = false;
     }
 
@@ -152,7 +154,6 @@ public:
     virtual bool isImportedFunction(offset_t offset, Executable::addr_type aType) const = 0;
     virtual QString getImportName(offset_t offset, Executable::addr_type aType) const = 0;
 
-    QList<offset_t> forksList;
     QList<offset_t>& blocksList() { return this->m_validBlocksOffsets; }
    
     CodeBlock* blockStartingAt(offset_t offset, Executable::addr_type aType = Executable::RAW)
@@ -295,6 +296,8 @@ protected:
     FuncManager m_funcManager;
     FuncManager m_impFuncManager;
 
+    QList<offset_t> forksList;
+    
     // basic keepers
     QMap<offset_t, DisasmBase*> m_offsetToDisasm;
     QMap<offset_t, CodeBlock> m_blocks;
