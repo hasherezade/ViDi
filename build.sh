@@ -32,5 +32,6 @@ echo "[+] build directory created"
 cd build
 mkdir $(pwd)/out
 cmake -G "CodeLite - Unix Makefiles" -DCMAKE_INSTALL_PREFIX:PATH=$(pwd)/out ..
+#cmake  -DCOMMIT_HASH:STRING="\"hello_Im_hash\"" 
 cmake --build . --target install --config Release
 

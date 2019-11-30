@@ -1,12 +1,14 @@
 cmake_minimum_required (VERSION 2.8.13)
 
+SET(COMMIT_HASH "test" CACHE STRING "Project build info")
+message("COMMIT_HASH=${COMMIT_HASH}")
+
 project (vidi)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
 include_directories ( ${PARSER_INC} )
 include_directories ( ${MINIDIS_DIR}/include )
-
 
 set ( core_hdrs
     core/Executables.h
@@ -142,6 +144,8 @@ SOURCE_GROUP("Header Files\\disasm_mv" FILES ${disasm_mv_hdrs} )
 SOURCE_GROUP("Source Files\\disasm_mv" FILES ${disasm_mv_srcs} )
 SOURCE_GROUP("Header Files\\lists_mv" FILES ${lists_mv_hdrs} )
 SOURCE_GROUP("Source Files\\lists_mv" FILES ${lists_mv_srcs} )
+
+add_definitions(-DCOMMIT_HASH=${COMMIT_HASH})
 
 IF (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
