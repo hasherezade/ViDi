@@ -14,7 +14,8 @@ public:
 
     CDisasm(Executable* exe, offset_t startOffset)
         : DisasmBase(exe, startOffset), m_insn(NULL) 
-    { }
+    {
+    }
     
     ~CDisasm()
     {
@@ -26,10 +27,8 @@ public:
 
     bool init(const offset_t startOffset, const bufsize_t disasmSize, Executable::exe_bits bitMode);
     
-    //virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements);
-    virtual bool fillTable(const DisasmSettings &settings);
-
 protected:
+    virtual DisasmChunk* makeChunk(offset_t startRVA);
     virtual size_t disasmNext();
 
     bool init_capstone(Executable::exe_bits bitMode);

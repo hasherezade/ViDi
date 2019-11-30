@@ -207,3 +207,45 @@ offset_t DisasmBase::getTargetOffset(const size_t index, Executable::addr_type a
     }
     return convertAddr(uChunk->getTargetAddr(), uChunk->getTargetAddrType(), aType);
 }
+
+bool DisasmBase::fillTable(const DisasmSettings &settings)
+{
+    if (this->is_init == false) {
+        printf("Not initialized!\n");
+        return false;
+    }
+    
+    const size_t maxElements = settings.getMaxDisasmElements();
+    bool stopAtBlockEnd = settings.isStopAtBlockEnd();
+    bool stopAtFuncEnd = settings.isStopAtFuncEnd();
+    
+    size_t index = 0;
+    offset_t startRVA = this->convertAddr(m_startOffset, Executable::RAW, Executable::RVA);
+    for (index = 0; disasmNext() > 0; index ++) {
+        
+        DisasmChunk *uChunk = makeChunk(startRVA);
+        if (!uChunk) break;
+
+        m_disasmBuf.append(uChunk);
+        //if (index < 2) printf("+%s\n", uChunk->toString().toStdString().c_str());
+        if (m_disasmBuf.size() == maxElements) {
+            stopAtBlockEnd = true;
+        }
+        if (m_disasmBuf.indexToOffset(index) == INVALID_ADDR) {
+            break;
+        }
+        if (stopAtFuncEnd) {
+            if (uChunk->isFuncEnd()) {
+                //it is a block end, but not a branching
+                break;
+            }
+        }
+        if (stopAtBlockEnd) {
+            if (uChunk->isFuncEnd() || uChunk->isBranching()) {
+                //printf("+%s\n", uChunk->toString().toStdString().c_str());
+                break;
+            }
+        }
+    }
+    return true;
+}
