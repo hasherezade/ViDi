@@ -26,7 +26,7 @@ public:
     {
         m_bitMode = m_Exe->getBitMode();
         
-        functionTraceSettings.m_stopAtBlockEnd = true;
+        functionTraceSettings.m_stopAtBlockEnd = false;
         functionTraceSettings.m_stopAtFuncEnd = true;
         
         sectionTraceSettings.m_stopAtBlockEnd = false;
