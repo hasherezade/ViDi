@@ -21,9 +21,11 @@ public:
     }
 
     bool init(offset_t rva, bufsize_t disasmSize, Executable::exe_bits bitMode);
-    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements = DEFAULT_MAX_EL);
 
 protected:
+
+    virtual DisasmChunk* makeChunk(offset_t startRVA);
+    
     static uint64_t trimToBitMode(int64_t value, Executable::exe_bits bits);
     //---
     virtual size_t disasmNext();

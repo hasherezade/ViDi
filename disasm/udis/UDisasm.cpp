@@ -42,32 +42,9 @@ size_t UDisasm::disasmNext()
     return step;
 }
 
-bool UDisasm::fillTable(bool stopAtBlockEnd, size_t max_el)
+DisasmChunk* UDisasm::makeChunk(offset_t startRVA)
 {
-    //printf("UDisasm::fillTable\n");
-    if (this->is_init == false) {
-        printf("Not initialized!\n");
-        return false;
-    }
-    
-    size_t index = 0;
-    offset_t startRVA = this->convertAddr(m_startOffset, Executable::RAW, Executable::RVA);
-
-    for (index = 0; disasmNext() > 0; index ++) {
-        UdisChunk *uChunk = new  UdisChunk(ud_obj, startRVA, m_Exe);
-        if (!uChunk) break;
-
-        m_disasmBuf.append(uChunk);
-        //if (index < 2) printf("+%s\n", uChunk->toString().toStdString().c_str());
-        if (m_disasmBuf.size() == max_el) stopAtBlockEnd = true;
-
-        if (m_disasmBuf.indexToOffset(index) == INVALID_ADDR) break;
-        if (stopAtBlockEnd && uChunk->isBlockEnd()) {
-            //printf("+%s\n", uChunk->toString().toStdString().c_str());
-            break;
-        }
-    }
-    return true;
+    return new UdisChunk(ud_obj, startRVA, m_Exe);
 }
 
 /* TODO: test it!!! */

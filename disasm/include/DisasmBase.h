@@ -88,7 +88,7 @@ public:
      * @param settings set of conditions at which te filling of the table should stop
      * @return true if successful
      */
-    virtual bool fillTable(const DisasmSettings &settings) = 0;
+    virtual bool fillTable(const DisasmSettings &settings);
 
     virtual void clearTable()
     {
@@ -194,7 +194,8 @@ public:
     DisasmChunkBuf m_disasmBuf;
 
 protected:
-
+    virtual DisasmChunk* makeChunk(offset_t startRVA) = 0;
+    
     // distance between current RVA and Target RVA
     int32_t getTargetDelta(const size_t index) const;
 

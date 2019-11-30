@@ -85,46 +85,10 @@ size_t CDisasm::disasmNext()
     return step;
 }
 
-bool CDisasm::fillTable(const DisasmSettings &settings)
+DisasmChunk* CDisasm::makeChunk(offset_t startRVA)
 {
-    //printf("CDisasm::fillTable\n");
-    if (this->is_init == false) {
-        printf("Not initialized!\n");
-        return false;
+    if (!m_insn) {
+        return NULL;
     }
-    
-    const size_t maxElements = settings.getMaxDisasmElements();
-    bool stopAtBlockEnd = settings.isStopAtBlockEnd();
-    bool stopAtFuncEnd = settings.isStopAtFuncEnd();
-    
-    size_t index = 0;
-    offset_t startRVA = this->convertAddr(m_startOffset, Executable::RAW, Executable::RVA);
-    for (index = 0; disasmNext() > 0; index ++) {
-        if (m_insn == NULL) break;
-
-        CapstoneChunk *uChunk = new CapstoneChunk(*m_insn, startRVA, m_Exe);
-        if (!uChunk) break;
-
-        m_disasmBuf.append(uChunk);
-        //if (index < 2) printf("+%s\n", uChunk->toString().toStdString().c_str());
-        if (m_disasmBuf.size() == maxElements) {
-            stopAtBlockEnd = true;
-        }
-        if (m_disasmBuf.indexToOffset(index) == INVALID_ADDR) {
-            break;
-        }
-        if (stopAtFuncEnd) {
-            if (uChunk->isFuncEnd()) {
-                //it is a block end, but not a branching
-                break;
-            }
-        }
-        if (stopAtBlockEnd) {
-            if (uChunk->isFuncEnd() || uChunk->isBranching()) {
-                //printf("+%s\n", uChunk->toString().toStdString().c_str());
-                break;
-            }
-        }
-    }
-    return true;
+    return new CapstoneChunk(*m_insn, startRVA, m_Exe);
 }
