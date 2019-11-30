@@ -229,7 +229,7 @@ bool DisasmBase::fillTable(const DisasmSettings &settings)
         m_disasmBuf.append(uChunk);
         //if (index < 2) printf("+%s\n", uChunk->toString().toStdString().c_str());
         if (m_disasmBuf.size() == maxElements) {
-            stopAtBlockEnd = true;
+            stopAtFuncEnd = true;
         }
         if (m_disasmBuf.indexToOffset(index) == INVALID_ADDR) {
             break;
