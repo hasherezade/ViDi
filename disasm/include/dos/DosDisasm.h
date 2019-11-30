@@ -12,7 +12,7 @@ class DosDisasm : public ExeDisasm
 public:
     DosDisasm(DOSExe *dos);
 
-    bool fillTable(bool stopAtBlockEnd, size_t maxElements);
+    bool fillTable(const DisasmSettings& settings);
 
     virtual bool isImportedFunction(offset_t offset, Executable::addr_type aType) const
     {

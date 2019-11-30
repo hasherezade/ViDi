@@ -15,7 +15,8 @@ public:
 
     DisasmChunk(offset_t startOffset,Executable *parent)
         : m_Exe(parent), m_startOffset(startOffset), m_bitMode(parent->getBitMode())
-    {}
+    {
+    }
 
     virtual ~DisasmChunk() {}
 
@@ -62,10 +63,11 @@ public:
 
     virtual bool isBranching() const;
     virtual bool isConditionalBranching() const;
-    virtual bool isUnonditionalBranching() const;
+    virtual bool isUnconditionalBranching() const;
     virtual bool isJump() const;
 
-    bool isBlockEnd() const;
+    bool isFuncEnd() const;
+    bool isRet() const;
 
     offset_t getTargetRaw() const { return this->m_targetVal.getTargetRaw(); }
     offset_t getTargetAddr() const { return this->m_targetVal.getTargetAddr(); }

@@ -8,8 +8,8 @@ DosDisasm::DosDisasm(DOSExe *dos)
     if (dos == NULL) throw CustomException("DOS Exe not initialized!");
 }
 
-bool DosDisasm::fillTable(bool stopAtBlockEnd, size_t maxElements)
+bool DosDisasm::fillTable(const DisasmSettings& settings)
 {
-    return ExeDisasm::fillTable(stopAtBlockEnd, maxElements);
+    return ExeDisasm::fillTable(settings);
 }
 

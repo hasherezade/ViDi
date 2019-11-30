@@ -8,7 +8,7 @@ PeDisasm::PeDisasm(PEFile *pe)
     if (pe == NULL) throw CustomException("PE not initialized!");
 }
 
-bool PeDisasm::fillTable(bool stopAtBlockEnd, size_t maxElements)
+bool PeDisasm::fillTable(const DisasmSettings& settings)
 {
-    return ExeDisasm::fillTable(stopAtBlockEnd, maxElements);
+    return ExeDisasm::fillTable(settings);
 }
