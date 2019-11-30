@@ -7,8 +7,46 @@
 #include "AddrConverter.h"
 #include "FuncNameManager.h"
 
+// maximal number of chunks that the disassembler is allowed to generate at the time
+
+#define MAX_DISASM_EL 1000
+
 namespace minidis {
 //------------------------------------------------
+
+    class DisasmSettings {
+    public:
+        DisasmSettings()
+        {
+           m_maxDisasmElements = MAX_DISASM_EL;
+           m_stopAtBlockEnd = true;
+           m_stopAtFuncEnd = true;
+        }
+        
+        size_t getMaxDisasmElements() const
+        {
+            return m_maxDisasmElements;
+        }
+        
+        bool isStopAtBlockEnd() const
+        {
+            return m_stopAtBlockEnd;
+        }
+        
+        bool isStopAtFuncEnd() const
+        {
+            return m_stopAtFuncEnd;
+        }
+        
+    protected:
+        size_t m_maxDisasmElements;
+        bool m_stopAtBlockEnd;
+        bool m_stopAtFuncEnd;
+        
+        friend class Tracer;
+        friend class DisasmBase;
+    };
+    
 
 /* abstract class, base of all the Disasms*/
 class DisasmBase : public AddrConverter
@@ -46,12 +84,11 @@ public:
     virtual bool isBranching(offset_t offset, Executable::addr_type aType) = 0;
     
     /**
-     * @brief fill table of disassembly chunks
-     * @param stopAtBlockEnd: should filling table stop when the block terminator detected
-     * @param maxElements: maximal number of disasembled lines - once the number is crossed, filling table will stop at block end.
+     * @brief fills table of disassembly chunks
+     * @param settings set of conditions at which te filling of the table should stop
      * @return true if successful
      */
-    virtual bool fillTable(bool stopAtBlockEnd, size_t maxElements) = 0;
+    virtual bool fillTable(const DisasmSettings &settings) = 0;
 
     virtual void clearTable()
     {

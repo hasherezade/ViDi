@@ -139,7 +139,7 @@ bool PeTracer::traceFunction(offset_t offset, Executable::addr_type aType, QStri
     const offset_t start = this->convertAddr(offset, aType, Executable::RAW);
     if (start == INVALID_ADDR) return false;
 
-    if (!makeDisasmAt(m_Exe, start, functionTraceSettings)) {
+    if (!makeDisasmAt(m_Exe, start, this->functionTraceSettings)) {
         return false;
     }
     traceArea(start);

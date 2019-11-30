@@ -9,27 +9,8 @@
 #include "DisasmBase.h"
 
 
-// maximal number of chunks that the disassembler is allowed to generate at the time
-#define MAX_DISASM_EL 1000
-
 namespace minidis {
     
-    class TracerSettings {
-    public:
-        TracerSettings()
-        {
-           m_maxDisasmElements = MAX_DISASM_EL;
-           m_stopAtBlockEnd = true;
-        }
-        
-    protected:
-        size_t m_maxDisasmElements;
-        bool m_stopAtBlockEnd;
-        
-        friend class Tracer;
-    };
-    
-
 class Tracer : public QObject, public AddrConverter
 {
     Q_OBJECT
@@ -45,8 +26,11 @@ public:
     {
         m_bitMode = m_Exe->getBitMode();
         
-        functionTraceSettings.m_stopAtBlockEnd = true; 
+        functionTraceSettings.m_stopAtBlockEnd = true;
+        functionTraceSettings.m_stopAtFuncEnd = true;
+        
         sectionTraceSettings.m_stopAtBlockEnd = false;
+        sectionTraceSettings.m_stopAtFuncEnd = false;
     }
 
     virtual ~Tracer() {}
@@ -273,7 +257,7 @@ protected:
     size_t fetchUnsolved(QSet<offset_t> &unresolvedSet);
     virtual size_t resolveUnsolvedBranches(const QSet<offset_t> &unsolved);
 
-    bool makeDisasmAt(Executable* exe, offset_t raw, TracerSettings &settings);
+    bool makeDisasmAt(Executable* exe, offset_t raw, DisasmSettings &settings);
     
     void addReferencedTargets(offset_t currOffset, offset_t target, DisasmChunk *chunk);
     void traceArea(offset_t start);
@@ -318,8 +302,8 @@ protected:
     Executable::exe_bits m_bitMode;
     Executable *m_Exe;
     
-    TracerSettings functionTraceSettings;
-    TracerSettings sectionTraceSettings;
+    DisasmSettings functionTraceSettings;
+    DisasmSettings sectionTraceSettings;
 
 }; /* class Tracer */
 

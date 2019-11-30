@@ -22,7 +22,7 @@ offset_t DisasmChunk::getImmediate(offset_t lval, Executable::addr_type outType,
     return convertAddr(val, detectedType, outType);
 }
 
-bool DisasmChunk::isBlockEnd() const
+bool DisasmChunk::isFuncEnd() const
 {
     mnem_type mnem = getMnemType();
     switch (mnem) {
@@ -33,6 +33,16 @@ bool DisasmChunk::isBlockEnd() const
     }
     return false;
 }
+
+bool DisasmChunk::isRet() const
+{
+    mnem_type mnem = getMnemType();
+    if (mnem == MT_RET) {
+        return true;
+    }
+    return false;
+}
+
 /*
 TargetValue DisasmChunk::fetchTargetAddr()
 {
@@ -55,7 +65,7 @@ TargetValue DisasmChunk::fetchTargetAddr()
 */
 bool DisasmChunk::isBranching() const
 {
-    return isConditionalBranching() || isUnonditionalBranching();
+    return isConditionalBranching() || isUnconditionalBranching();
 }
 
 bool DisasmChunk::isConditionalBranching() const
@@ -68,7 +78,7 @@ bool DisasmChunk::isConditionalBranching() const
     return false;
 }
 
-bool DisasmChunk::isUnonditionalBranching() const
+bool DisasmChunk::isUnconditionalBranching() const
 {
     switch (m_mnemType) {
         case MT_JUMP:

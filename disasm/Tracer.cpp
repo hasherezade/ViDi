@@ -310,7 +310,7 @@ DisasmBase* Tracer::getDisasmAt(offset_t offset, Executable::addr_type inType) c
     return NULL;
 }
 
-bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, TracerSettings &settings)
+bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, DisasmSettings &settings)
 {
     //printf("Disasm making at %x\n", offset);
     DisasmBase *disasm = getDisasmAt(offset);
@@ -321,7 +321,7 @@ bool Tracer::makeDisasmAt(Executable* exe, offset_t offset, TracerSettings &sett
     }
     disasm = m_offsetToDisasm[offset];
     //printf("Filling table...\n");
-    disasm->fillTable(settings.m_stopAtBlockEnd, settings.m_maxDisasmElements);
+    disasm->fillTable(settings);
     return true;
 }
 
