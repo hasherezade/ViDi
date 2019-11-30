@@ -4,7 +4,7 @@
 
 const QString APP_NAME = "ViDi";
 const QString APP_EXTNAME = "Visual Disassembler";
-const QString APP_VERSION = "0.2.5.6";
+const QString APP_VERSION = "0.2.5.6-a";
 const QString SITE_LINK = "https://vidi.hasherezade.net/";
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -428,6 +428,12 @@ void MainWindow::info()
     QPixmap p(":/favicon.ico");
     QString appName = APP_NAME + " "+ APP_EXTNAME + "<br/>version: " + APP_VERSION + " Qt5 *alpha*";
     QString msg = "<b>" + appName + "</b><br/>";
+#ifdef COMMIT_HASH
+    QString hash = QString(COMMIT_HASH);
+    if (hash.length() > 0) {
+        msg += "commit hash: " + QString(COMMIT_HASH)+ "<br/>";
+    }
+#endif
     msg += "author: <a href=\"https://hasherezade.net\">hasherezade</a><br/><br/>";
     msg += "PE parsing powered by: <a href=\"https://github.com/hasherezade/bearparser/\">bearparser</a><br/>";
 

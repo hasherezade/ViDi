@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8.13)
 project (vidi)
 
+SET(COMMIT_HASH "" CACHE STRING "Commit Hash")
+
 # modules:
 set ( M_BEARPARSER "bearparser/parser" )
 set ( M_MINIDIS "disasm" )
