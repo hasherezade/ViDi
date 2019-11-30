@@ -47,7 +47,7 @@ CodeBlock* Tracer::getOrMakeCodeBlockAt(offset_t offset)
 size_t Tracer::fetchUnsolved(QSet<offset_t> &unsolved)
 {
     size_t added = 0;
-    for (QMap<offset_t, ForkPoint>::iterator itr = m_forks.begin();itr != m_forks.end(); itr++) {
+    for (QMap<offset_t, ForkPoint>::iterator itr = m_forks.begin();itr != m_forks.end(); ++itr) {
         ForkPoint &p = itr.value();
         offset_t uOff = p.yesOffset;
         if (uOff == INVALID_ADDR) continue;
@@ -57,7 +57,7 @@ size_t Tracer::fetchUnsolved(QSet<offset_t> &unsolved)
         }
     }
     QList<offset_t> func = m_funcManager.list();
-    for (QList<offset_t>::iterator itr = func.begin();itr != func.end(); itr++) {
+    for (QList<offset_t>::iterator itr = func.begin();itr != func.end(); ++itr) {
         offset_t uOff = *itr;
         uOff = this->convertAddr(uOff, m_funcManager.getAddrType(), Executable::RAW);
         if (uOff == INVALID_ADDR) continue;
@@ -73,7 +73,7 @@ size_t Tracer::resolveUnsolvedBranches(const QSet<offset_t> &unsolved)
 {
     size_t added = 0;
     QSet<offset_t>::const_iterator oItr;
-    for (oItr = unsolved.begin();oItr != unsolved.end(); oItr++) {
+    for (oItr = unsolved.begin();oItr != unsolved.end(); ++oItr) {
         offset_t uOff = *oItr;
         if (uOff == INVALID_ADDR) continue;
         if (!getDisasmAt(uOff)) {
@@ -258,7 +258,7 @@ void Tracer::filterValidBlocks()
 {
     //block addr type: RAW
     QMap<offset_t, CodeBlock>::iterator itr;
-    for (itr = this->m_blocks.begin(); itr != m_blocks.end(); itr++ ) {
+    for (itr = this->m_blocks.begin(); itr != m_blocks.end(); ++itr) {
 
         offset_t offset = itr.key();
         CodeBlock &block = itr.value();
@@ -277,12 +277,12 @@ void Tracer::filterValidBlocks()
 void Tracer::traceReferencedCodeBlocks()
 {
     QMap<offset_t, QSet<offset_t> >::iterator itr;
-    for (itr = this->m_refs.begin(); itr != m_refs.end(); itr++ ) {
+    for (itr = this->m_refs.begin(); itr != m_refs.end(); ++itr ) {
         offset_t offset = itr.key();
         QSet<offset_t> &rSet = itr.value();
         QSet<offset_t>::iterator itrR;
 
-        for (itrR = rSet.begin(); itrR != rSet.end(); itrR++ ) {
+        for (itrR = rSet.begin(); itrR != rSet.end(); ++itrR ) {
             CodeBlock* block = this->blockAt(*itrR);
             if (!block) continue;
             this->m_refBlocks[offset].insert(block);
@@ -301,7 +301,7 @@ DisasmBase* Tracer::getDisasmAt(offset_t offset, Executable::addr_type inType) c
     }
     // closest 
     QMap<offset_t, DisasmBase*>::const_iterator disItr = this->m_offsetToDisasm.begin();//upperBound(offset);
-    for (; disItr != this->m_offsetToDisasm.constEnd() ; disItr++) {
+    for (; disItr != this->m_offsetToDisasm.constEnd(); ++disItr) {
         DisasmBase* dis = disItr.value();
         if (dis->hasOffset(offset)) {
             return dis;

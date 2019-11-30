@@ -56,7 +56,7 @@ void Executables::_clear()
 {
     QMutexLocker lock(&m_listMutex); //LOCKER
     QList<ExeHandler*>::iterator itr;
-    for (itr = m_Exes.begin(); itr != m_Exes.end(); itr++) {
+    for (itr = m_Exes.begin(); itr != m_Exes.end(); ++itr) {
         ExeHandler *exe = (*itr);
         delete exe;
     }

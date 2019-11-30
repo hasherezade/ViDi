@@ -82,7 +82,7 @@ size_t FuncNameManager::save(const QString &fileName)
     QTextStream out(&outputFile);
     QMap<offset_t, QString>::iterator itr;
     size_t counter = 0;
-    for (itr = functionToName.begin(); itr != functionToName.end(); itr++) {
+    for (itr = functionToName.begin(); itr != functionToName.end(); ++itr) {
         //convert every offset into RVA:
         offset_t rva = m_Converter->convertAddr(itr.key(), Executable::RAW, Executable::RVA);
         out << hex << rva;

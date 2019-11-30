@@ -31,7 +31,7 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
     
     int added = 0;
     QSet<offset_t>::const_iterator pItr;
-    for (pItr = prologs.constBegin(); pItr != prologs.constEnd(); pItr++) {
+    for (pItr = prologs.constBegin(); pItr != prologs.constEnd(); ++pItr) {
         offset_t prologOffset = *pItr;
         
         offset_t prologOffsetRVA = exe->convertAddr(prologOffset, Executable::RAW, Executable::RVA);
@@ -47,7 +47,7 @@ bool ExeHandlerLoader::trace(ExeHandler &exeHndl)
         }
     }
     QMap<offset_t,QString>::const_iterator itr;
-    for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); itr++) {
+    for (itr = entrypoints.constBegin(); itr != entrypoints.constEnd(); ++itr) {
         const offset_t epRaw = itr.key();
         const QString name = itr.value();
         tracer->defineFunction(epRaw, Executable::RAW, name);
