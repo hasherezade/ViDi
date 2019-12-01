@@ -2,6 +2,8 @@
 
 #include "../ExeDisasm.h"
 
+#include <bearparser/pefile.h>
+
 #define PREVIEW_SIZE 0x200
 
 namespace minidis {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtWidgets>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 namespace vidi
 {

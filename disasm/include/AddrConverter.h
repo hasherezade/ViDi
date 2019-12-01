@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 #define INVALID_INDEX (-1)
 
