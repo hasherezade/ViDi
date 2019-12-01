@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 namespace minidis {
 

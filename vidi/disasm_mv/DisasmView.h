@@ -1,6 +1,6 @@
 #pragma once
 #include <QtWidgets>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 #include "disasm_mv/DisasmBaseModel.h"
 

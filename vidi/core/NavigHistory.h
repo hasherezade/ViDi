@@ -1,6 +1,6 @@
 #pragma once
 #include <QtCore>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 class NavigHistory : public QObject
 {

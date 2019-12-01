@@ -1,6 +1,6 @@
 #pragma once
 #include <QtGui>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 #include "ui_filteredframe.h"
 #include "OffsetedModel.h"

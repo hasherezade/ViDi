@@ -3,7 +3,7 @@
 #include <QtCore>
 #include <QSet>
 #include <vector>
-#include <bearparser.h>
+#include <bearparser/core.h>
 
 #include "CodeBlock.h"
 #include "DisasmBase.h"

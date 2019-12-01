@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <bearparser.h>
+#include <bearparser/pefile.h>
 
 #include "Tracer.h"
 #include "DosDisasm.h"
