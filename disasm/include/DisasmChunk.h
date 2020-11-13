@@ -79,8 +79,7 @@ protected:
     {
         QString str;
         for (size_t i = 0; i < size; i++) {
-            const uint8_t num = buf[i];
-            str += QString::number(num, 16).leftJustified(2,'0');
+            str += QString().asprintf("%02X", buf[i]);
         }
         return str;
     }
