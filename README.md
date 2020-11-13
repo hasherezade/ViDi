@@ -7,8 +7,6 @@ ViDi - Visual Disassembler
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/hasherezade/ViDi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hasherezade/ViDi/alerts/)
 
 Supports: PE 32/64 bit, DOS MZ
-
-**WARNING: this is my old unfinished project, I am puting it here as an experiment! Be aware of possible instability.**<br/>
 **[Issues](https://github.com/hasherezade/ViDi/issues)**
 
 Requires:
