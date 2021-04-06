@@ -2,7 +2,7 @@
 
 #include "../ExeDisasm.h"
 
-#include <bearparser/pefile.h>
+#include <bearparser/pe.h>
 
 #define PREVIEW_SIZE 0x200
 

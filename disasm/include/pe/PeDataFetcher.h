@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bearparser/pefile.h>
+#include <bearparser/pe.h>
 
 namespace minidis {
 
