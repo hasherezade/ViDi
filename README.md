@@ -14,7 +14,7 @@ Requires:
 +   Qt5 Core
 +   Qt5 Widget
 +   bearparser
-+   capstone (eventually: udis86)
++   capstone (optionally: udis86)
 +   [cmake](http://www.cmake.org)
 
 To build it on Linux or MacOS you can use the given script - it automatically downloads this repository and all the dependencies:<br/>
