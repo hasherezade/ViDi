@@ -14,11 +14,11 @@ static bool isImportedFunction(PEFile *m_PE, offset_t offset, Executable::addr_t
     Executable::addr_type detectedType = m_PE->detectAddrType(offset, aType);
     offset_t rva = m_PE->convertAddr(offset, detectedType, Executable::RVA);
 
-    ImportDirWrapper *imports = m_PE->getImports();
+    ImportDirWrapper *imports = m_PE->getImportsDir();
     if (imports) {
         if (imports->hasThunk(rva)) return true;
     }
-    DelayImpDirWrapper* delayedImps = m_PE->getDelayedImports();
+    DelayImpDirWrapper* delayedImps = m_PE->getDelayedImportsDir();
     if (delayedImps) {
         
         
@@ -42,13 +42,13 @@ static QString getImportName(PEFile *m_PE, offset_t offset, Executable::addr_typ
     Executable::addr_type detectedType = m_PE->detectAddrType(offset, aType);
     offset_t rva = m_PE->convertAddr(offset, detectedType, Executable::RVA);
 
-    ImportDirWrapper *imports = m_PE->getImports();
+    ImportDirWrapper *imports = m_PE->getImportsDir();
     if (imports) {
         if (imports->hasThunk(rva)) {
             return imports->thunkToLibName(rva) + "." + imports->thunkToFuncName(rva);
         }
     }
-    DelayImpDirWrapper* delayedImps = m_PE->getDelayedImports();
+    DelayImpDirWrapper* delayedImps = m_PE->getDelayedImportsDir();
     if (delayedImps) {
         if (delayedImps->hasThunk(rva)) {
             return delayedImps->thunkToLibName(rva) + ":" + delayedImps->thunkToFuncName(rva);
